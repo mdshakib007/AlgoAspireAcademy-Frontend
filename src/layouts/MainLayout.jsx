@@ -18,7 +18,7 @@ const MainLayout = () => {
             <AuthModal ref={modalRef} />
 
             <main className="min-h-screen">
-                <Outlet />
+                <Outlet context={modalRef} />
             </main>
 
             <Footer />

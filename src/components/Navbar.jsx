@@ -7,7 +7,7 @@ import { AuthContext } from "../context/AuthContext";
 import {
     FaBell, FaYoutube, FaDiscord, FaBolt, FaBookmark,
     FaHourglassStart, FaUser, FaSignOutAlt, FaQuestionCircle,
-    FaExternalLinkAlt, FaChevronDown, FaInfoCircle, FaLock
+    FaExternalLinkAlt, FaChevronDown, FaInfoCircle, FaLock, FaCrown
 } from "react-icons/fa";
 import { FaGear } from "react-icons/fa6";
 import { HiMiniXMark } from "react-icons/hi2";
@@ -61,6 +61,7 @@ const Navbar = ({ modalRef }) => {
                                     <li><Link to="/faq"><FaQuestionCircle /> FAQ</Link></li>
                                     <li><Link to="/privacy"><FaLock /> Privacy Policy</Link></li>
                                     <li><Link to="/terms"><RiPagesFill /> Terms & Condition</Link></li>
+                                    <li><Link to="/credit"><FaCrown /> Credit</Link></li>
                                     <div className="border-b border-gray-500 my-2"></div>
                                     <li><a href="https://youtube.com/@AlgoAspire/" target="_blank"><FaYoutube /> YouTube <FaExternalLinkAlt /></a></li>
                                     <li><a href="https://discord.gg/PRM5vGcSH9" target="_blank"><FaDiscord /> Discord Community <FaExternalLinkAlt /></a></li>
@@ -154,9 +155,11 @@ const Navbar = ({ modalRef }) => {
                                 <SimpleButton>
                                     <Link to="/more">More</Link>
                                 </SimpleButton>
-                                <GlowingButton>
-                                    <Link to='/login'>Sign In</Link>
-                                </GlowingButton>
+                                <p onClick={() => modalRef.current?.openModal()}>
+                                    <GlowingButton className="w-full">
+                                        Sign In
+                                    </GlowingButton>
+                                </p>
                             </>
                         }
                     </div>
