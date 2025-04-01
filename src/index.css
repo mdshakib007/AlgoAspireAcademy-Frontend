@@ -83,7 +83,7 @@ html {
 }
 
 .text-glow {
-    text-shadow: 0 0 5px #fa9e15, 0 0 30px #faae15, 0 0 15px #fa1515;
+    text-shadow: 0 0 50px #fa9e15, 0 0 30px #faae15, 0 0 5px #fa1515;
 }
 
 .gradient-text {

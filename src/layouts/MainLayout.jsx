@@ -1,9 +1,9 @@
 import { Outlet } from "react-router-dom";
 import { useRef } from "react";
-import Navbar from "../components/Navbar";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import AuthModal from "../components/AuthModal";
+import Navbar from "../components/Common/Navbar";
+import Header from "../components/Common/Header";
+import Footer from "../components/Common/Footer";
+import AuthModal from "../components/Common/AuthModal";
 
 const MainLayout = () => {
     const modalRef = useRef(null);  // Create a ref for the modal

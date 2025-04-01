@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useState, useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
-import CommonButton from "./CommonButton";
+import { AuthContext } from "../../context/AuthContext";
+import CommonButton from "../Common/CommonButton";
 import toast from "react-hot-toast";
 
 const RegistrationForm = () => { 

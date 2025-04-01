@@ -1,21 +1,19 @@
 import { FaExternalLinkAlt } from 'react-icons/fa';
-import CommonButton from './CommonButton';
+import CommonButton from '../Common/CommonButton';
 import { Link } from 'react-router-dom';
 
 
-const HeroSection = () => {
+const StructureHero = () => {
     return (
-        <section className="container mx-auto min-h-[70vh] flex flex-col md:flex-row justify-between items-center px-2">
+        <section className="container mx-auto flex flex-col md:flex-row justify-between items-center mt-24 px-2">
             <div>
                 <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold tracking-wider">
-                    Aspiring Mind<br />
-                    <span>Infinite <span className="text-glow font-mono">Code!</span></span>
+                    The Best Course<br />
+                    <span className="text-glow">Structure</span> to Learn!
                 </h1>
 
                 <p className="mt-4 text-lg">
-                    Everything is <span className="text-3xl md:text-4xl lg:text-5xl font-bold gradient-text">100%</span> free here!<br />Learn programming for
-                    <span className="text-3xl md:text-4xl lg:text-5xl font-bold gradient-text"> Free </span>
-                    with quality content!
+                    Structure is<span className="text-3xl md:text-4xl lg:text-5xl font-bold gradient-text"> Best </span>Here<br />Just Like a Bird's<span className="text-3xl md:text-4xl lg:text-5xl font-bold gradient-text"> Nest!</span>
                 </p>
 
                 <div className='flex gap-10 my-10'>
@@ -28,10 +26,10 @@ const HeroSection = () => {
                 </div>
             </div>
             <div>
-                <img src="/learning-sketch.svg" alt="Hero" className="w-full max-w-sm md:max-w-md lg:max-w-xl h-auto" />
+                <img src="/structure.svg" alt="Hero" className="w-full max-w-sm md:max-w-md lg:max-w-xl h-auto" />
             </div>
         </section>
     );
 };
 
-export default HeroSection;
+export default StructureHero;

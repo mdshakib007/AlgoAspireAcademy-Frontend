@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { HashLink } from 'react-router-hash-link';
 import GlowingButton from './GlowingButton';
 import SimpleButton from './SimpleButton';
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
 import {
     FaBell, FaYoutube, FaDiscord, FaBolt, FaBookmark,
     FaHourglassStart, FaUser, FaSignOutAlt, FaQuestionCircle,

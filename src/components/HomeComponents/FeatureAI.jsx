@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { IoSend } from "react-icons/io5";
-import CommonButton from './CommonButton';
+import CommonButton from '../Common/CommonButton';
 import { Link } from 'react-router-dom';
 
 const FeatureAI = () => {
@@ -68,7 +68,7 @@ const FeatureAI = () => {
             </div>
             <div>
                 <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold tracking-wider">
-                    <span className="text-glow font-mono">AI</span> Powered Learning!
+                    <span className="text-glow">AI</span> Powered Learning!
                 </h1>
                 <p className="mt-4 text-lg">
                     <span className="text-3xl md:text-4xl lg:text-5xl font-bold gradient-text">Gear</span> Up Your Learning Stage!<br />

@@ -3,11 +3,11 @@ import { useState, useContext } from 'react';
 import { motion } from "framer-motion";
 import { MdPlayLesson, MdQuiz } from "react-icons/md";
 import { FaVideo, FaBook } from "react-icons/fa";
-import GlowingButton from './GlowingButton';
-import features from '../data/features';
+import GlowingButton from '../Common/GlowingButton';
+import features from '../../data/features';
 import FeatureCard from './FeatureCard';
 import { Link } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
+import { AuthContext } from '../../context/AuthContext';
 
 
 
