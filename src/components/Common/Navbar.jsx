@@ -107,7 +107,7 @@ const Navbar = ({ modalRef }) => {
                                 </div>
                             </div>
                             <ul tabIndex={0} className="menu dropdown-content bg-gray-900 rounded-box mt-3 w-62 md:w-72 text-md md:text-lg">
-                                <li><Link to="/profile"><FaUser /> Profile</Link></li>
+                                <li><Link to={`/profile/${user?.username}`}><FaUser /> Profile</Link></li>
                                 <li><Link to="/my-courses"><FaHourglassStart /> Continue Learning</Link></li>
                                 <li><Link to="/dashboard"><RiDashboardHorizontalFill /> Dashboard</Link></li>
                                 <li><Link to="/activity"><FaBookmark /> Bookmarks</Link></li>

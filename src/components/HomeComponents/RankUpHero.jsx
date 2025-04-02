@@ -7,6 +7,9 @@ const RankUpHero = () => {
     return (
         <section className="container mx-auto flex flex-col md:flex-row justify-between items-center mt-24 px-2">
             <div>
+                <img src="/rank_up.svg" alt="Hero" className="w-full max-w-sm md:max-w-md lg:max-w-xl h-auto" />
+            </div>
+            <div>
                 <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold tracking-wider">
                     The <span className="text-glow"> Leaderboard </span><br /> is Awaits You!
                 </h1>
@@ -23,9 +26,6 @@ const RankUpHero = () => {
                         <CommonButton>Explore More</CommonButton>
                     </Link>
                 </div>
-            </div>
-            <div>
-                <img src="/rank_up.svg" alt="Hero" className="w-full max-w-sm md:max-w-md lg:max-w-xl h-auto" />
             </div>
         </section>
     );

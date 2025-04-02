@@ -93,23 +93,52 @@ html {
     -webkit-text-fill-color: transparent;
 }
 
-/* Custom colors to override the default heatmap color classes */
-.react-calendar-heatmap .color-empty {
-    fill: #ebedf0;
+.heatmap-container {
+    overflow-x: auto;
+    /* Enables horizontal scrolling */
+    max-width: 100%;
+    /* Ensures it doesn’t overflow the screen */
+    padding: 1rem;
+    border: 2px solid #4a4a4a;
+    border-radius: 10px;
+}
+
+.heatmap-wrapper {
+    display: inline-block;
+    width: 100%;
+    /* Makes it adapt to the parent container */
+    max-width: 100%;
+    /* Prevents it from stretching too wide */
+    min-width: 900px;
 }
 
 .react-calendar-heatmap .color-scale-1 {
-    fill: #9be9a8;
+    fill: #c6e48b;
+    border-radius: 5px;
 }
 
 .react-calendar-heatmap .color-scale-2 {
-    fill: #40c463;
+    fill: #7bc96f;
+    border-radius: 5px;
 }
 
 .react-calendar-heatmap .color-scale-3 {
-    fill: #30a14e;
+    fill: #239a3b;
+    border-radius: 5px;
 }
 
 .react-calendar-heatmap .color-scale-4 {
-    fill: #216e39;
+    fill: #196127;
+    border-radius: 5px;
+}
+
+.react-calendar-heatmap .color-empty {
+    fill: #2d2d2d;
+    border-radius: 5px;
+}
+
+.react-calendar-heatmap rect:hover {
+    stroke: #f59e0b;
+    stroke-width: 1px;
+    cursor: pointer;
 }
