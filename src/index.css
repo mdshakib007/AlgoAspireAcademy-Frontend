@@ -68,7 +68,7 @@ html {
     box-shadow: 0 5px #f59e0b;
 }
 
-.common-button:hover{
+.common-button:hover {
     box-shadow: 0 2px #f97316;
 }
 
@@ -91,4 +91,25 @@ html {
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+}
+
+/* Custom colors to override the default heatmap color classes */
+.react-calendar-heatmap .color-empty {
+    fill: #ebedf0;
+}
+
+.react-calendar-heatmap .color-scale-1 {
+    fill: #9be9a8;
+}
+
+.react-calendar-heatmap .color-scale-2 {
+    fill: #40c463;
+}
+
+.react-calendar-heatmap .color-scale-3 {
+    fill: #30a14e;
+}
+
+.react-calendar-heatmap .color-scale-4 {
+    fill: #216e39;
 }

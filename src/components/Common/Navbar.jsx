@@ -103,7 +103,7 @@ const Navbar = ({ modalRef }) => {
                         <div className="dropdown dropdown-end cursor-pointer">
                             <div tabIndex={0} role="button" className="px-2 py-1">
                                 <div>
-                                    <img src={user?.profile_picture || "/default-user.png"} alt="Profile" className="w-12 h-12 object-cover rounded-full" />
+                                    <img src={user?.profile_picture || "/default-user.png"} alt="Profile" className="w-12 h-12 object-cover rounded-full border border-gray-700" />
                                 </div>
                             </div>
                             <ul tabIndex={0} className="menu dropdown-content bg-gray-900 rounded-box mt-3 w-62 md:w-72 text-md md:text-lg">

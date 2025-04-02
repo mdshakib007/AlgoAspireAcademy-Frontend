@@ -1,10 +1,11 @@
-import React from 'react';
+import { React } from 'react';
+import Header from '../components/ProfileComponents/Header';
 
 const Profile = () => {
     return (
-        <div>
-            <span className="loading loading-spinner loading-xl"></span>
-        </div>
+        <>
+            <Header></Header>
+        </>
     );
 };
 
