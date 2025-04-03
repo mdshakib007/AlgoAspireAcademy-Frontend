@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect, useCallback } from "react";
 import api from "../api/axiosInstance";
+import toast from "react-hot-toast";
 
 export const AuthContext = createContext();
 
@@ -11,7 +12,7 @@ export const AuthProvider = ({ children }) => {
             const userRes = await api.get('/api/account/me/');
             setUser(userRes.data);
         } catch (error) {
-            console.error("Failed to fetch user", error);
+            console.error("Failed to fetch user",error);
             sessionStorage.removeItem("access_token");
         }
     }, []);
@@ -30,7 +31,7 @@ export const AuthProvider = ({ children }) => {
             const response = await api.post("/api/account/login/", { identifier, password });
 
             sessionStorage.setItem("access_token", response.data.access);
-            setUser(response.data.user);
+            fetchUser();
         } catch (error) {
             console.error(error);
             throw error;
@@ -43,7 +44,7 @@ export const AuthProvider = ({ children }) => {
             const response = await api.post("/api/account/register/", registrationData);
             return response.data;
         } catch (error) {
-            console.error("Registration failed", error);
+            console.error("Registration failed");
             throw error;
         }
     };
@@ -59,8 +60,9 @@ export const AuthProvider = ({ children }) => {
 
             // Clear user state
             setUser(null);
+            window.location.href = '/';
         } catch (error) {
-            console.error("Logout failed", error);
+            console.error("Logout failed");
             throw error;
         }
     };
@@ -71,13 +73,39 @@ export const AuthProvider = ({ children }) => {
             setUser((user) => ({ ...user, ...data })); // Update state with new values
             return data;
         } catch (error) {
-            console.error("Update user failed", error);
+            console.error("Update user failed");
+            throw error;
+        }
+    };
+
+    const changePassword = async (oldPassword, newPassword, confirmNewPassword) => {
+        try {
+            const { data } = await api.post("/api/account/change-password/", {
+                old_password: oldPassword,
+                new_password: newPassword,
+                new_password_confirm: confirmNewPassword,
+            });
+            console.log("Password changed successfully");
+            return data;
+        } catch (error) {
+            console.error("Password change failed");
+            throw error;
+        }
+    };
+
+    const deleteAccount = async () => {
+        try{
+            const {data} = await api.post("/api/account/delete/");
+            console.log('Account Deleted Successfully');
+            return data;
+        } catch(error){
+            console.error(error);
             throw error;
         }
     };
 
     return (
-        <AuthContext.Provider value={{ user, fetchUser, login, registerUser, updateUser, logout }}>
+        <AuthContext.Provider value={{ user, fetchUser, login, registerUser, updateUser, changePassword, logout, deleteAccount }}>
             {children}
         </AuthContext.Provider>
     );

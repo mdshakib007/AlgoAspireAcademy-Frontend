@@ -90,9 +90,9 @@ const Navbar = ({ modalRef }) => {
                                 <div className="p-3 text-md md:text-lg">
                                     <span className="font-bold text-white">3 Notifications</span>
                                     <ul className="mt-2 text-white">
-                                        <li className="p-2 hover:bg-gray-700 rounded">New course added!</li>
-                                        <li className="p-2 hover:bg-gray-700 rounded">You got a new follower</li>
-                                        <li className="p-2 hover:bg-gray-700 rounded">Your post was liked</li>
+                                        <li className="p-2 hover:bg-gray-800 rounded">New course added!</li>
+                                        <li className="p-2 hover:bg-gray-800 rounded">You got a new follower</li>
+                                        <li className="p-2 hover:bg-gray-800 rounded">Your post was liked</li>
                                     </ul>
                                 </div>
                             </div>
@@ -136,27 +136,39 @@ const Navbar = ({ modalRef }) => {
             {/* Mobile Menu */}
             {
                 menuOpen && (
-                    <div className="lg:hidden bg-transparent backdrop-blur-xl text-white p-4 flex flex-col gap-2">
-                        <SimpleButton>
-                            <Link to="/courses">All Courses</Link>
-                        </SimpleButton>
-                        <SimpleButton>
-                            <Link to="/cp-course">CP Arena</Link>
-                        </SimpleButton>
-                        <SimpleButton>
-                            <Link to="/forum">Forum</Link>
-                        </SimpleButton>
-                        <SimpleButton>
-                            <Link to="/leaderboard">Leaderborad</Link>
-                        </SimpleButton>
+                    <div
+                        className="lg:hidden bg-transparent backdrop-blur-xl text-white p-4 flex flex-col gap-2 justify-center items-center"
+                    >
+                        <Link to="/courses" onClick={()=> setMenuOpen(false)}>
+                            <SimpleButton>
+                                All Courses
+                            </SimpleButton>
+                        </Link>
+                        <Link to="/cp-course" onClick={()=> setMenuOpen(false)}>
+                            <SimpleButton>
+                                CP Arena
+                            </SimpleButton>
+                        </Link>
+                        <Link to="/forum" onClick={()=> setMenuOpen(false)}>
+                            <SimpleButton>
+                                Forum
+                            </SimpleButton>
+                        </Link>
+                        <Link to="/leaderboard" onClick={()=> setMenuOpen(false)}>
+                            <SimpleButton>
+                                Leaderborad
+                            </SimpleButton>
+                        </Link>
                         {
                             !user &&
                             <>
-                                <SimpleButton>
-                                    <Link to="/more">More</Link>
-                                </SimpleButton>
+                                <Link to="/more" onClick={()=> setMenuOpen(false)}>
+                                    <SimpleButton>
+                                        More
+                                    </SimpleButton>
+                                </Link>
                                 <p onClick={() => modalRef.current?.openModal()}>
-                                    <GlowingButton className="w-full">
+                                    <GlowingButton>
                                         Sign In
                                     </GlowingButton>
                                 </p>

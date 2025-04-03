@@ -7,8 +7,8 @@ import { FaPen, FaLinesLeaning } from "react-icons/fa6";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import { FaRegUserCircle } from "react-icons/fa";
 import General from './General';
-import About from './About';
 import Others from './Others';
+import Social from './Social';
 
 
 const Header = () => {
@@ -55,7 +55,7 @@ const Header = () => {
                 <label className="tab flex items-center gap-2">
                     <input type="radio" name="profile_tabs" defaultChecked />
                     <IoMdInformationCircleOutline />
-                    General
+                    About
                 </label>
                 <div className="tab-content bg-gray-700 p-6">
                     <General></General>
@@ -64,10 +64,10 @@ const Header = () => {
                 <label className="tab flex items-center gap-2">
                     <input type="radio" name="profile_tabs" />
                     <FaRegUserCircle />
-                    About
+                    Social
                 </label>
                 <div className="tab-content bg-gray-700 p-6">
-                    <About></About>
+                    <Social></Social>
                 </div>
 
                 <label className="tab flex items-center gap-2">

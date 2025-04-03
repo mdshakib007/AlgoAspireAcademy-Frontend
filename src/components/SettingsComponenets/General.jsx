@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { AuthContext } from "../../context/AuthContext";
 import { FaPen } from "react-icons/fa6";
 import CommonButton from '../Common/CommonButton';
+import toast from 'react-hot-toast';
 
 
 const General = () => {
@@ -23,8 +24,9 @@ const General = () => {
             await updateUser({ [editingField]: data[editingField] });
             fetchUser();
             document.getElementById('change_info_modal').close();
+            toast.success("Information updated successfully");
         } catch (error) {
-            console.error("Failed to update user info", error);
+            toast.error("Failed to update user info");
         }
     };
 
@@ -68,7 +70,7 @@ const General = () => {
                     <form method="dialog">
                         <button className="btn text-lg btn-circle btn-ghost absolute right-2 top-2">✕</button>
                     </form>
-                    <h3 className="font-bold text-2xl mb-6">Update {editingField ? fields.find(f => f.key === editingField)?.label : 'Info'}</h3>
+                    <h3 className="font-bold text-2xl mb-6">Edit {editingField ? fields.find(f => f.key === editingField)?.label : 'Info'}</h3>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div>
                             <label className="block text-sm font-medium">{editingField ? fields.find(f => f.key === editingField)?.label : 'Field'}</label>

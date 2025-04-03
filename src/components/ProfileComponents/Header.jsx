@@ -52,7 +52,7 @@ const Header = ({ username }) => {
     }
 
     if (!currentUser) {
-        return <p className="text-center text-gray-300">User not found.</p>;
+        return <p className="text-center text-gray-300 text-3xl">User not found.</p>;
     }
 
     const values = [
