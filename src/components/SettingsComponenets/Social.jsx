@@ -6,15 +6,15 @@ import CommonButton from '../Common/CommonButton';
 import toast from 'react-hot-toast';
 
 const Social = () => {
-    const { user, fetchUser, updateUser } = useContext(AuthContext);
+    const { user, fetchMe, updateUser } = useContext(AuthContext);
     const { register, handleSubmit, setValue, formState: { errors } } = useForm();
     const [editingField, setEditingField] = useState(null);
 
     useEffect(() => {
         if (!user) {
-            fetchUser();
+            fetchMe();
         }
-    }, [user, fetchUser]);
+    }, [user, fetchMe]);
 
     // Helper function to define validation rules based on the field being edited.
     const getValidationRules = (field) => {
@@ -38,7 +38,7 @@ const Social = () => {
         if (!editingField) return;
         try {
             await updateUser({ [editingField]: data[editingField] });
-            fetchUser();
+            fetchMe();
             document.getElementById('change_social_modal').close();
             toast.success("Information updated successfully");
         } catch (error) {

@@ -14,7 +14,7 @@ import CommonButton from '../Common/CommonButton'; // Assuming you have this com
 import toast from 'react-hot-toast';
 
 const Header = () => {
-    const { user, fetchUser, updateUser } = useContext(AuthContext);
+    const { user, fetchMe, updateUser } = useContext(AuthContext);
     const [preview, setPreview] = useState(null);
     const [uploading, setUploading] = useState(false);
     const modalRef = useRef();
@@ -27,8 +27,8 @@ const Header = () => {
     } = useForm();
 
     useEffect(() => {
-        if (!user) fetchUser();
-    }, [user, fetchUser]);
+        if (!user) fetchMe();
+    }, [user, fetchMe]);
 
     const selectedFile = watch("profile_picture");
 
@@ -73,7 +73,7 @@ const Header = () => {
 
         try {
             await updateUser({ profile_picture : profile_url });
-            fetchUser();
+            fetchMe();
             setUploading(false);
             document.getElementById('change_profile_pic_modal').close();
             toast.success("Profile picture updated successfully");

@@ -20,13 +20,13 @@ import Summary from './Summary';
 
 
 const Header = ({ username }) => {
-    const { user, fetchUser } = useContext(AuthContext);
+    const { user, fetchMe } = useContext(AuthContext);
     const [currentUser, setCurrentUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         if (!user) {
-            fetchUser();
+            fetchMe();
         }
 
         if (user?.username === username) {
@@ -47,7 +47,7 @@ const Header = ({ username }) => {
                     setLoading(false);
                 });
         }
-    }, [user, username, fetchUser]);
+    }, [user, username, fetchMe]);
 
     if (loading) {
         return <ProfileSkeleton />;
@@ -121,7 +121,7 @@ const Header = ({ username }) => {
                     About
                 </label>
                 <div className="tab-content bg-gray-700 p-6">
-                    <About user={user} />
+                    <About />
                 </div>
             </div>
 

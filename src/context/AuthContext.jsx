@@ -1,19 +1,29 @@
 import { createContext, useState, useEffect, useCallback } from "react";
 import api from "../api/axiosInstance";
-import toast from "react-hot-toast";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+    const [visitUser, setVisitUser] = useState(null);
 
-    const fetchUser = useCallback(async () => {
+    const fetchMe = useCallback(async () => {
         try {
             const userRes = await api.get('/api/account/me/');
             setUser(userRes.data);
         } catch (error) {
-            console.error("Failed to fetch user",error);
+            console.error("Failed to fetch user", error);
             sessionStorage.removeItem("access_token");
+        }
+    }, []);
+
+    const fetchUser = useCallback(async (username) => {
+        try {
+            const userRes = await api.get(`/api/account/${username}/`);
+            setVisitUser(userRes.data);
+        } catch (error) {
+            console.error("Failed to fetch user", error);
+            throw error;
         }
     }, []);
 
@@ -21,9 +31,9 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const token = sessionStorage.getItem("access_token");
         if (token) {
-            fetchUser();
+            fetchMe();
         }
-    }, [fetchUser]);
+    }, [fetchMe]);
 
     // Login function: called when user logs in
     const login = async (identifier, password) => {
@@ -31,7 +41,7 @@ export const AuthProvider = ({ children }) => {
             const response = await api.post("/api/account/login/", { identifier, password });
 
             sessionStorage.setItem("access_token", response.data.access);
-            fetchUser();
+            fetchMe();
         } catch (error) {
             console.error(error);
             throw error;
@@ -94,18 +104,18 @@ export const AuthProvider = ({ children }) => {
     };
 
     const deleteAccount = async () => {
-        try{
-            const {data} = await api.post("/api/account/delete/");
+        try {
+            const { data } = await api.post("/api/account/delete/");
             console.log('Account Deleted Successfully');
             return data;
-        } catch(error){
+        } catch (error) {
             console.error(error);
             throw error;
         }
     };
 
     return (
-        <AuthContext.Provider value={{ user, fetchUser, login, registerUser, updateUser, changePassword, logout, deleteAccount }}>
+        <AuthContext.Provider value={{ user, visitUser, fetchMe, fetchUser, login, registerUser, updateUser, changePassword, logout, deleteAccount }}>
             {children}
         </AuthContext.Provider>
     );

@@ -10,7 +10,7 @@ import { BiWorld } from "react-icons/bi";
 
 
 const Others = () => {
-    const { user, fetchUser, updateUser, changePassword, deleteAccount } = useContext(AuthContext);
+    const { user, fetchMe, updateUser, changePassword, deleteAccount } = useContext(AuthContext);
     const { register, handleSubmit, setValue, reset, watch, formState: { errors } } = useForm();
     const [editingField, setEditingField] = useState(null);
     const [skills, setSkills] = useState([]); // local state for skills input
@@ -18,13 +18,13 @@ const Others = () => {
 
     useEffect(() => {
         if (!user) {
-            fetchUser();
+            fetchMe();
         }
         // Initialize skills if available
         if (user?.skills) {
             setSkills(user.skills);
         }
-    }, [user, fetchUser]);
+    }, [user, fetchMe]);
 
     const closeModal = () => {
         document.getElementById('change_others_modal').close();
@@ -45,7 +45,7 @@ const Others = () => {
             // Pass only password data
             try {
                 await changePassword(oldPassword, newPassword, confirmNewPassword);
-                fetchUser();
+                fetchMe();
                 closeModal();
                 toast.success("Password updated successfully");
             } catch (error) {
@@ -63,7 +63,7 @@ const Others = () => {
                         end_date: data.end_date
                     }
                 });
-                fetchUser();
+                fetchMe();
                 closeModal();
                 toast.success("Experience updated successfully");
             } catch (error) {
@@ -74,7 +74,7 @@ const Others = () => {
             // Use local skills state in place of form data
             try {
                 await updateUser({ skills });
-                fetchUser();
+                fetchMe();
                 closeModal();
                 toast.success("Skills updated successfully");
             } catch (error) {
@@ -85,7 +85,7 @@ const Others = () => {
             // For private, data.private will be a boolean
             try {
                 await updateUser({ is_private: !user?.is_private });
-                fetchUser();
+                fetchMe();
                 closeModal();
                 toast.success("Profile privacy updated");
             } catch (error) {

@@ -1,8 +1,18 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { FaEnvelope, FaPhoneAlt, FaMapMarkerAlt, FaBirthdayCake, FaBuilding, FaGithub, FaInstagram, FaLinkedin, FaCode, FaBriefcase, FaLink } from 'react-icons/fa';
+import { AuthContext } from '../../context/AuthContext';
+import { useParams } from 'react-router-dom';
 
-const About = ({ user }) => {
-    if (!user) return null;
+
+const About = () => {
+    const { visitUser, fetchUser } = useContext(AuthContext);
+    const params = useParams();
+
+    useEffect(() => {
+        fetchUser(params.username);
+    }, [fetchUser, params.username]);
+
+    if (!visitUser) return null;
 
     const {
         full_name,
@@ -22,7 +32,7 @@ const About = ({ user }) => {
         linkedin,
         codeforces,
         job_experiences
-    } = user;
+    } = visitUser;
 
     return (
         <div className="max-w-5xl mx-auto p-4 mt-8 text-white">

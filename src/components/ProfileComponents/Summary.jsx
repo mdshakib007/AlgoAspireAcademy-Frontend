@@ -78,7 +78,7 @@ const Summary = () => {
                 {running_course ? (
                     <CourseCard course={running_course} />
                 ) : (
-                    <p className="italic text-gray-300 py-5 text-center">You are not enrolled in any course currently.</p>
+                    <p className="italic text-gray-300 py-5 text-center">Not enrolled in any course currently.</p>
                 )}
             </div>
 
