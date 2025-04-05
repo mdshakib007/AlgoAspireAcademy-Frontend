@@ -5,7 +5,7 @@ import { MdVerified } from "react-icons/md";
 const LoadUsername = ({ currentUser }) => {
     return (
         <>
-            <p
+            <h3
                 className='text-yellow-500 text-xl md:text-2xl flex items-center gap-2'
             >
                 @{currentUser.username} {
@@ -15,7 +15,7 @@ const LoadUsername = ({ currentUser }) => {
                     ><MdVerified />
                     </span>
                 }
-            </p>
+            </h3>
         </>
     );
 };

@@ -3,17 +3,19 @@ import { AuthContext } from "../../context/AuthContext";
 import ProfileSkeleton from "./ProfileSkeleton";
 import LoadUsername from '../Common/LoadUsername';
 import { FaPen, FaLinesLeaning } from "react-icons/fa6";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { FaArrowLeft, FaArrowRight, FaRegUserCircle } from "react-icons/fa";
 import GlowingButton from "../Common/GlowingButton";
 import { MdDashboard } from "react-icons/md";
 import { Link } from 'react-router-dom';
 import { IoTrophyOutline } from "react-icons/io5";
-import { IoMdInformationCircleOutline } from "react-icons/io";
 import { SlBadge } from "react-icons/sl";
 import CalendarHeatmap from 'react-calendar-heatmap';
 import 'react-calendar-heatmap/dist/styles.css';
 import CommonButton from '../Common/CommonButton';
 import axios from 'axios';
+import About from './About';
+import Badges from './Badges';
+import Achievements from './Achievements';
 
 
 const Header = ({ username }) => {
@@ -22,7 +24,7 @@ const Header = ({ username }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if(!user){
+        if (!user) {
             fetchUser();
         }
 
@@ -52,7 +54,7 @@ const Header = ({ username }) => {
     }
 
     if (!currentUser) {
-        return <p className="text-center text-gray-300 text-3xl">User not found.</p>;
+        return <p className="text-center text-gray-300 text-3xl">This profile is private or profile does not exists.</p>;
     }
 
     const values = [
@@ -73,7 +75,8 @@ const Header = ({ username }) => {
                     className='h-40 md:h-52 w-40 md:w-52 rounded-full object-cover p-2 border-3 border-gray-700'
                 />
                 <LoadUsername currentUser={currentUser}></LoadUsername>
-                <p className='text-2xl md:text-3xl text-gray-300 font-bold'>{currentUser.full_name}</p>
+                <h3 className='text-2xl md:text-3xl text-gray-300 font-bold'>{currentUser.full_name}</h3>
+                <p className='text-gray-300 mx-2'>{user.bio}</p>
             </div>
             {
                 user?.username === username &&
@@ -97,21 +100,27 @@ const Header = ({ username }) => {
                     <IoTrophyOutline />
                     Achievements
                 </label>
-                <div className="tab-content bg-gray-700 p-6">Tab content 2</div>
+                <div className="tab-content bg-gray-700 p-6">
+                    <Achievements />
+                </div>
 
                 <label className="tab flex items-center gap-2">
                     <input type="radio" name="profile_tabs" />
                     <SlBadge />
                     Badges
                 </label>
-                <div className="tab-content bg-gray-700 p-6">Tab content 3</div>
+                <div className="tab-content bg-gray-700 p-6">
+                    <Badges />
+                </div>
 
                 <label className="tab flex items-center gap-2">
                     <input type="radio" name="profile_tabs" />
-                    <IoMdInformationCircleOutline />
+                    <FaRegUserCircle />
                     About
                 </label>
-                <div className="tab-content bg-gray-700 p-6">Tab content 4</div>
+                <div className="tab-content bg-gray-700 p-6">
+                    <About user={user} />
+                </div>
             </div>
 
             {/* activity heatmap */}

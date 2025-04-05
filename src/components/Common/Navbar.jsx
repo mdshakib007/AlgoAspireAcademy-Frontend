@@ -1,5 +1,5 @@
-import { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { useContext, useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { HashLink } from 'react-router-hash-link';
 import GlowingButton from './GlowingButton';
 import SimpleButton from './SimpleButton';
@@ -18,8 +18,13 @@ import { RiDashboardHorizontalFill, RiPagesFill } from "react-icons/ri";
 const Navbar = ({ modalRef }) => {
     const { user, logout } = useContext(AuthContext);
     const [menuOpen, setMenuOpen] = useState(false); // For mobile menu toggle
-
+    
+    const location = useLocation();
     const toggleMenu = () => setMenuOpen(!menuOpen);
+
+    useEffect(()=>{
+        setMenuOpen(false);
+    }, [location.pathname]);
 
     return (
         <nav className="fixed top-0 left-0 w-full text-white z-50">
@@ -98,6 +103,8 @@ const Navbar = ({ modalRef }) => {
                             </div>
                         </div>
                     }
+                    
+                    {/* user profile dropdown  */}
                     {
                         user &&
                         <div className="dropdown dropdown-end cursor-pointer">
@@ -122,7 +129,6 @@ const Navbar = ({ modalRef }) => {
                             </ul>
                         </div>
                     }
-
 
                     {/* Mobile Menu Toggle Button */}
                     <div className="lg:hidden">

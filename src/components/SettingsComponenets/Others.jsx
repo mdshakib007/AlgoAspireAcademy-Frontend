@@ -10,7 +10,7 @@ import { BiWorld } from "react-icons/bi";
 
 
 const Others = () => {
-    const { user, fetchUser, updateUser, changePassword, deleteAccount, logout } = useContext(AuthContext);
+    const { user, fetchUser, updateUser, changePassword, deleteAccount } = useContext(AuthContext);
     const { register, handleSubmit, setValue, reset, watch, formState: { errors } } = useForm();
     const [editingField, setEditingField] = useState(null);
     const [skills, setSkills] = useState([]); // local state for skills input
