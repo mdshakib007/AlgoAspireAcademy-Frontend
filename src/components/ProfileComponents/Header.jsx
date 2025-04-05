@@ -16,6 +16,7 @@ import axios from 'axios';
 import About from './About';
 import Badges from './Badges';
 import Achievements from './Achievements';
+import Summary from './Summary';
 
 
 const Header = ({ username }) => {
@@ -34,9 +35,8 @@ const Header = ({ username }) => {
             setLoading(false);
         } else {
             // If visiting someone else's profile, fetch the user
-            axios.get(`/api/account/user/${username}/`)
+            axios.get(`/api/account/${username}/`)
                 .then((response) => {
-                    console.log(response)
                     setCurrentUser(response.data);
                 })
                 .catch((error) => {
@@ -93,7 +93,9 @@ const Header = ({ username }) => {
                     <FaLinesLeaning />
                     Summary
                 </label>
-                <div className="tab-content bg-gray-700 p-6">Tab content 1</div>
+                <div className="tab-content bg-gray-700 p-6">
+                    <Summary></Summary>
+                </div>
 
                 <label className="tab flex items-center gap-2">
                     <input type="radio" name="profile_tabs" />

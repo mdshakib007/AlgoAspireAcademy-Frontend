@@ -76,7 +76,7 @@ const About = ({ user }) => {
                             <p className="text-gray-300">{job_experiences.company}</p>
                         </div>
                         <div className="text-right text-gray-400">
-                            <p>{job_experiences.start_date} → {job_experiences.end_date}</p>
+                            <p>{job_experiences.start_date} - {job_experiences.end_date}</p>
                         </div>
                     </div>
                 )}
