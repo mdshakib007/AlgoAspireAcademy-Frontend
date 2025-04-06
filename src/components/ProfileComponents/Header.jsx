@@ -17,6 +17,7 @@ import About from './About';
 import Badges from './Badges';
 import Achievements from './Achievements';
 import Summary from './Summary';
+import api from '../../api/axiosInstance';
 
 
 const Header = ({ username }) => {
@@ -25,17 +26,40 @@ const Header = ({ username }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        const token = sessionStorage.getItem("access_token"); // or localStorage if you store it there
+
+        // Case: User is logged out
+        if (!token) {
+            if (username) {
+                // If visiting another user's public profile
+                api.get(`/api/account/${username}/`)
+                    .then((response) => {
+                        setCurrentUser(response.data);
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching user data:", error);
+                        setCurrentUser(null);
+                    })
+                    .finally(() => {
+                        setLoading(false);
+                    });
+            } else {
+                setCurrentUser(null);
+                setLoading(false);
+            }
+            return;
+        }
+
+        // Case: User is logged in
         if (!user) {
-            fetchMe();
+            fetchMe(); // Will set the AuthContext's user eventually
         }
 
         if (user?.username === username) {
-            // If visiting own profile, set currentUser to logged-in user
             setCurrentUser(user);
             setLoading(false);
         } else {
-            // If visiting someone else's profile, fetch the user
-            axios.get(`/api/account/${username}/`)
+            api.get(`/api/account/${username}/`)
                 .then((response) => {
                     setCurrentUser(response.data);
                 })
@@ -75,8 +99,8 @@ const Header = ({ username }) => {
                     className='h-40 md:h-52 w-40 md:w-52 rounded-full object-cover p-2 border-3 border-gray-700'
                 />
                 <LoadUsername currentUser={currentUser}></LoadUsername>
-                <h3 className='text-2xl md:text-3xl text-gray-300 font-bold'>{currentUser.full_name}</h3>
-                <p className='text-gray-300 mx-2'>{user.bio}</p>
+                {currentUser.full_name && <h3 className='text-2xl md:text-3xl text-gray-300 font-bold'>{currentUser.full_name}</h3>}
+                {currentUser.bio && <p className='text-gray-300 mx-2'>{currentUser.bio}</p>}
             </div>
             {
                 user?.username === username &&

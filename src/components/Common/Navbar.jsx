@@ -14,6 +14,7 @@ import { HiMiniXMark } from "react-icons/hi2";
 import { BiMenuAltRight } from "react-icons/bi";
 import { RiDashboardHorizontalFill, RiPagesFill } from "react-icons/ri";
 import Headroom from 'react-headroom';
+import Hamburger from 'hamburger-react'
 
 
 const Navbar = ({ modalRef }) => {
@@ -135,7 +136,7 @@ const Navbar = ({ modalRef }) => {
                         {/* Mobile Menu Toggle Button */}
                         <div className="lg:hidden">
                             <button className="px-2 py-1 text-2xl" onClick={toggleMenu}>
-                                {menuOpen ? <HiMiniXMark /> : <BiMenuAltRight />}
+                                <Hamburger toggled={menuOpen} toggle={setMenuOpen} />
                             </button>
                         </div>
                     </div>

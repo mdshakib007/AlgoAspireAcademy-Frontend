@@ -8,6 +8,8 @@ export const AuthProvider = ({ children }) => {
     const [visitUser, setVisitUser] = useState(null);
 
     const fetchMe = useCallback(async () => {
+        if (!sessionStorage.getItem("access_token")) return null;
+
         try {
             const userRes = await api.get('/api/account/me/');
             setUser(userRes.data);

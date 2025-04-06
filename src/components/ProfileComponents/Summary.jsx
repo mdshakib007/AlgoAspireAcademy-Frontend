@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import api from '../../api/axiosInstance';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import GlowingButton from '../Common/GlowingButton';
+import {MdDashboard} from 'react-icons/md';
+
 
 // Reusable circular stat
 const ProgressCircle = ({ value, total, label }) => {
@@ -104,6 +107,9 @@ const Summary = () => {
                     <ProgressCircle value={completed_lesson_count} total={total_lesson_count} label="Lessons Completed" />
                     <ProgressCircle value={completed_quiz_count} total={total_quiz_count} label="Quizzes Completed" />
                     <ProgressCircle value={completed_assignment_count} total={total_assignment_count} label="Assignments Completed" />
+                </div>
+                <div className='flex justify-center mt-10'>
+                <Link to='/dashboard'><GlowingButton><MdDashboard />My Dashboard</GlowingButton></Link>
                 </div>
             </div>
         </div>

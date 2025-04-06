@@ -31,7 +31,8 @@ const About = () => {
         instagram,
         linkedin,
         codeforces,
-        job_experiences
+        job_experiences,
+        skills
     } = visitUser;
 
     return (
@@ -40,7 +41,7 @@ const About = () => {
             <div className="bg-gray-800 rounded-xl shadow-md p-6 flex flex-col md:flex-row gap-6 items-center">
                 <img src={profile_picture || '/default-user.png'} alt={username} className="w-40 h-40 object-cover rounded-full border-4 border-yellow-500" />
                 <div>
-                    <h1 className="text-3xl font-bold">{full_name || "N/A"}</h1>
+                    <h1 className="text-3xl font-bold">{full_name || username}</h1>
                     <p className="text-lg text-gray-400">@{username}</p>
                     <p className="mt-2">{bio || "N/A"}</p>
                     {
@@ -79,7 +80,7 @@ const About = () => {
             {/* Job Experience */}
             <div className="bg-gray-900 rounded-xl mt-6 p-6 border border-gray-700">
                 <h2 className="text-xl font-semibold border-b border-gray-600 pb-2 mb-4">Job Experience</h2>
-                {job_experiences && (
+                {job_experiences ? (
                     <div className="flex flex-col md:flex-row justify-between">
                         <div className="flex flex-col gap-2">
                             <p className="text-lg"><FaBriefcase className="inline mr-2" /> {job_experiences.title}</p>
@@ -89,7 +90,28 @@ const About = () => {
                             <p>{job_experiences.start_date} - {job_experiences.end_date}</p>
                         </div>
                     </div>
-                )}
+                ) :
+                    <p className='text-sm text-gray-300 text-center my-5 italic'>No Job Experiences</p>
+                }
+            </div>
+
+            {/* Skills */}
+            <div className="bg-gray-900 rounded-xl mt-6 p-6 border border-gray-700">
+                <h2 className="text-xl font-semibold border-b border-gray-600 pb-2 mb-4">Skills</h2>
+                {skills ? skills.length > 0 && (
+                    <div className="flex flex-wrap gap-3">
+                        {skills.map((skill, idx) => (
+                            <span
+                                key={idx}
+                                className="bg-white hover:bg-yellow-500 text-black font-bold px-4 py-1 rounded shadow cursor-pointer"
+                            >
+                                {skill}
+                            </span>
+                        ))}
+                    </div>
+                ) :
+                    <p className='text-sm text-gray-300 text-center my-5 italic'>No Skills Provided</p>
+                }
             </div>
         </div>
     );

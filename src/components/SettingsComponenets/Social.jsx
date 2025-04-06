@@ -65,7 +65,7 @@ const Social = () => {
         <>
             <div className='text-lg'>
                 {fields.map(({ key, label }) => (
-                    <div key={key} className={`flex justify-between p-2 border-b border-gray-500 ${key !== 'bio' && 'text-yellow-500'}`}>
+                    <div key={key} className={`flex justify-between p-2 border-b border-gray-500 overflow-auto ${key !== 'bio' && 'text-yellow-500 font-mono'}`}>
                         <div>
                             <h1 className='text-gray-300'>{label}</h1>
                             <h1 className='font-bold'>
@@ -82,7 +82,7 @@ const Social = () => {
 
                         </div>
                         <button
-                            className='text-gray-300 bg-black h-10 w-10 rounded-box cursor-pointer flex justify-center items-center'
+                            className='text-gray-300 bg-black px-2 h-10 rounded-box cursor-pointer flex justify-center items-center'
                             onClick={() => openModal(key, user?.[key])}
                         >
                             <FaPen />

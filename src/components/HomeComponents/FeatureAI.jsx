@@ -4,53 +4,51 @@ import CommonButton from '../Common/CommonButton';
 import { Link } from 'react-router-dom';
 
 const FeatureAI = () => {
-    // Wrap the prompts array in useMemo so that it doesn't change on every render
     const prompts = useMemo(() => [
         "✨ Discover the magic of AI, ask your questions!                                    ",
         " ✨ Unravel coding mysteries one query at a time!                                    ",
         " ✨ Got a challenge? Let AI illuminate the path.                                     ",
-        " ✨ Curiosity is your superpower—dive in now!                                        ",
+        " ✨ Curiosity is your superpower dive in now!                                        ",
         " ✨ Which course sparks your passion today?                                          ",
         " ✨ Stuck on a problem? Let's crack it together.                                     "
     ], []);
 
-    // State to manage current prompt index and the text that has been typed so far
     const [currentPromptIndex, setCurrentPromptIndex] = useState(0);
     const [displayedText, setDisplayedText] = useState("");
 
     useEffect(() => {
-        // Reset the displayed text when the prompt index changes
         setDisplayedText("");
         const currentPrompt = prompts[currentPromptIndex];
         let charIndex = 0;
-        const typingSpeed = 50; // in milliseconds per character
+        const typingSpeed = 50;
 
-        // Start interval to simulate typewriter effect
         const typeInterval = setInterval(() => {
             setDisplayedText(prev => prev + currentPrompt[charIndex]);
             charIndex++;
 
-            // When all characters have been added, clear the interval
             if (charIndex >= currentPrompt.length) {
                 clearInterval(typeInterval);
-                // Pause before starting the next prompt (e.g., 1500 ms)
                 setTimeout(() => {
                     setCurrentPromptIndex((prevIndex) => (prevIndex + 1) % prompts.length);
                 }, 10);
             }
         }, typingSpeed);
 
-        // Cleanup the interval if the component unmounts or the prompt changes
         return () => clearInterval(typeInterval);
     }, [currentPromptIndex, prompts]);
 
     return (
-        <section className="container mx-auto flex flex-col-reverse md:flex-row justify-between items-center px-2 mt-24">
-            <div>
-                <img src="ai-feature.svg" alt="AI" className="w-full max-w-sm md:max-w-md lg:max-w-xl h-auto" />
-                <div className="animate-slideDown p-4">
-                    <div className="flex items-center border border-gray-700 rounded-full px-3 py-2 flex-1">
-                        {/* Use the typewriter effect output as the placeholder */}
+        <section className="container mx-auto px-4 md:px-8 lg:px-16 mt-24 flex flex-col-reverse md:flex-row items-center justify-between gap-12">
+            
+            {/* Left - Image + AI Input */}
+            <div className="w-full md:w-1/2 flex flex-col items-center gap-6">
+                <img
+                    src="ai-feature.svg"
+                    alt="AI"
+                    className="w-64 md:w-80 lg:w-[28rem] h-auto object-contain"
+                />
+                <div className="animate-slideDown w-full max-w-md">
+                    <div className="flex items-center border border-gray-700 rounded-full px-4 py-2 bg-gray-800">
                         <input
                             type="text"
                             className="text-md bg-transparent flex-1 outline-none text-gray-200 placeholder-gray-400"
@@ -66,23 +64,31 @@ const FeatureAI = () => {
                     </div>
                 </div>
             </div>
-            <div>
-                <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold tracking-wider">
+
+            {/* Right - Text Content */}
+            <div className="w-full md:w-1/2 text-center md:text-left flex flex-col gap-6">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-wider leading-tight">
                     <span className="text-glow">AI</span> Powered Learning!
                 </h1>
-                <p className="mt-4 text-lg">
+                <p className="text-lg md:text-xl text-gray-300 leading-relaxed">
                     <span className="text-3xl md:text-4xl lg:text-5xl font-bold gradient-text">Gear</span> Up Your Learning Stage!<br />
                     Do not <span className="text-3xl md:text-4xl lg:text-5xl font-bold gradient-text">Fear</span> Programming Anymore!
                 </p>
-                <div className='flex gap-10 my-10'>
-                    <Link to='/courses'>
+
+                <div className="flex flex-wrap justify-center md:justify-start gap-6 my-6">
+                    <Link to="/courses">
                         <CommonButton>See Courses</CommonButton>
                     </Link>
-                    <a href='https://youtube.com/@AlgoAspire/' target='_blank' rel="noopener noreferrer">
+                    <a
+                        href="https://youtube.com/@AlgoAspire/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
                         <CommonButton>Ask AI</CommonButton>
                     </a>
                 </div>
             </div>
+
         </section>
     );
 };

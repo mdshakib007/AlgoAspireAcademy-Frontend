@@ -179,7 +179,7 @@ const Others = () => {
                             <h1 className='font-bold flex items-center gap-2'>{renderDisplayValue(key)}</h1>
                         </div>
                         <button
-                            className='text-gray-300 bg-black h-10 w-10 rounded-box cursor-pointer flex justify-center items-center'
+                            className='text-gray-300 bg-black px-2 h-10 rounded-box cursor-pointer flex justify-center items-center'
                             onClick={() => openModal(key, user?.[key])}
                         >
                             {key === 'delete' ? <FaTrash className='text-red-500' /> : <FaPen />}
