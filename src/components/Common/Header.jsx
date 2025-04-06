@@ -2,14 +2,9 @@ import React from 'react';
 
 const Header = () => {
     return (
-        <div>
-            <div>
-                <div
-                    className='text-3xl md:text-4xl lg:text-6xl font-bold bg-gradient-to-r from-yellow-500 to-orange-500 blur-2xl h-24 opacity-30'
-                >
-                </div>
-            </div>
-        </div>
+        <div
+            className="fixed top-0 left-0 w-full h-24 bg-gradient-to-b from-red-500 to-yellow-500 via-orange-500 blur-3xl opacity-30 -z-10 pointer-events-none"
+        />
     );
 };
 

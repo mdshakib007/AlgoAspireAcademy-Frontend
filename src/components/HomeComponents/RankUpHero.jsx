@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 const RankUpHero = () => {
     return (
-        <section className="container mx-auto flex flex-col md:flex-row justify-between items-center mt-24 px-2">
+        <section className="container mx-auto flex flex-col-reverse md:flex-row justify-between items-center mt-24 px-2">
             <div>
                 <img src="/rank_up.svg" alt="Hero" className="w-full max-w-sm md:max-w-md lg:max-w-xl h-auto" />
             </div>
