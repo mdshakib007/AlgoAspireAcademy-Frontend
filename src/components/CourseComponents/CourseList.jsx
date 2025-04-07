@@ -40,7 +40,12 @@ const CourseList = () => {
                                     <h2 className="card-title text-2xl">{course.name}</h2>
                                     <p className="text-sm mt-1">
                                         <span className="opacity-70">By </span>
-                                        <span className="font-bold gradient-text cursor-pointer">{course.instructor_name}</span>
+                                        <span className="font-semibold text-yellow-500 hover:underline cursor-pointer">
+                                            <Link
+                                                to={`/profile/${course.instructor_name}`}>
+                                                {course.instructor_name}
+                                            </Link>
+                                        </span>
                                     </p>
                                     <div className="text-right">
                                         <Link to={`/course/${course.id}-${course.slug}`}>

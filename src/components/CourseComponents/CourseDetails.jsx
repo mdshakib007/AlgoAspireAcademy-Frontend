@@ -1,11 +1,31 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import api from "../../api/axiosInstance";
 import CommonButton from "../Common/CommonButton";
-import GlowingButton from "../Common/GlowingButton";
-import { MdAssignmentAdd, MdOutlineQuiz } from "react-icons/md";
+import { MdAssignmentAdd, MdOutlineQuiz, MdOndemandVideo } from "react-icons/md";
+import { FaUserFriends } from "react-icons/fa";
 import { VscFileSubmodule } from "react-icons/vsc";
-import { LuListTodo } from "react-icons/lu";
+import { LuListTodo, LuFileQuestion, LuNotebookText } from "react-icons/lu";
+import { IoDocumentTextOutline } from "react-icons/io5";
+import { HashLink } from "react-router-hash-link";
+import CourseFeatures from "./CourseFeatures";
+
+
+const getIcon = (type) => {
+    switch (type) {
+        case "Video":
+            return <MdOndemandVideo className="text-yellow-500" />;
+        case "Text":
+            return <IoDocumentTextOutline className="text-yellow-500" />;
+        case "Assignment":
+            return <LuNotebookText className="text-yellow-500" />;
+        case "Quiz":
+            return <LuFileQuestion className="text-yellow-500" />;
+        default:
+            return <span><IoDocumentTextOutline className="text-yellow-500" /></span>;
+    }
+};
 
 
 const CourseDetail = () => {
@@ -28,6 +48,10 @@ const CourseDetail = () => {
             .catch(err => console.error(err));
     }, [id, slug, navigate]);
 
+    const enrollNow = () => {
+        console.log("enroll");
+    }
+
     if (!course) {
         return <div className="text-center text-gray-300">Loading course details...</div>;
     }
@@ -43,43 +67,84 @@ const CourseDetail = () => {
                         className="w-full lg:w-[500px] rounded-xl shadow-lg aspect-video object-cover"
                     />
                     <div className="flex-1 space-y-4">
-                        <h1 className="text-4xl font-bold">{course.name}</h1>
+                        <h1 className="text-4xl font-bold">
+                            {course.name} {course.i_enrolled && <span className="text-lg border px-2 py-1 rounded-box text-glow badge-warning">Already Enrolled</span>}
+                        </h1>
                         <p className="text-gray-300 text-sm">Course Code: <span className="text-yellow-500 font-semibold">{course.code}</span></p>
                         <p className="leading-relaxed">{course.description}</p>
                         <p>
                             <span className="opacity-70">Instructor:</span>{" "}
-                            <span className="font-semibold gradient-text cursor-pointer">{course.instructor_name}</span>
+                            <span className="font-semibold text-yellow-500 hover:underline cursor-pointer">
+                                <Link
+                                    to={`/profile/${course.instructor_name}`}>
+                                    {course.instructor_name}
+                                </Link>
+                            </span>
                         </p>
                         <div className="flex flex-wrap gap-4 mt-4">
-                            <span className="border flex items-center gap-2 rounded-box border-yellow-500 gradient-text text-xl px-4 py-1"> <VscFileSubmodule /> {course.module_count} Modules</span>
-                            <span className="border flex items-center gap-2 rounded-box border-yellow-500 gradient-text text-xl px-4 py-1"><LuListTodo /> {course.lesson_count} Lessons</span>
-                            <span className="border flex items-center gap-2 rounded-box border-yellow-500 gradient-text text-xl px-4 py-1"> <MdAssignmentAdd /> {course.assignment_count} Assignments</span>
-                            <span className="border flex items-center gap-2 rounded-box border-yellow-500 gradient-text text-xl px-4 py-1"><MdOutlineQuiz />{course.quiz_count} Quizzes</span>
+                            <span className="border flex items-center gap-2 rounded-box border-yellow-500 px-4 py-1"> <VscFileSubmodule /> {course.module_count} Modules</span>
+                            <span className="border flex items-center gap-2 rounded-box border-yellow-500 px-4 py-1"><LuListTodo /> {course.lesson_count} Lessons</span>
+                            <span className="border flex items-center gap-2 rounded-box border-yellow-500 px-4 py-1"> <MdAssignmentAdd /> {course.assignment_count} Assignments</span>
+                            <span className="border flex items-center gap-2 rounded-box border-yellow-500 px-4 py-1"><MdOutlineQuiz />{course.quiz_count} Quizzes</span>
+                            <span className="border flex items-center gap-2 rounded-box border-yellow-500 px-4 py-1"><FaUserFriends />{course.enrolled} Enrolled</span>
                         </div>
                         <div className="flex gap-4 mt-6">
-                            <CommonButton>Enroll Now</CommonButton>
-                            <GlowingButton>Start Learning</GlowingButton>
+                            {
+                                course.i_enrolled ? <Link>
+                                    <CommonButton>Continue Learning</CommonButton>
+                                </Link> :
+                                    <CommonButton onClick={enrollNow}>Enroll Now</CommonButton>
+                            }
+                            <HashLink to='#features'>
+                                <CommonButton>All Features</CommonButton>
+                            </HashLink>
                         </div>
                     </div>
                 </div>
 
                 {/* Module List */}
-                <div className="bg-base-100 p-6 rounded-xl shadow-md border border-base-300">
-                    <h2 className="text-2xl font-semibold mb-4 gradient-text">Course Modules</h2>
-                    <ul className="space-y-3">
+                <div className="bg-base-100 p-6 rounded-xl shadow-md border border-base-300 mt-10">
+                    <h2 className="text-2xl font-semibold mb-4 gradient-text">Course Content</h2>
+                    <div className="space-y-4">
                         {course.modules.map((module, idx) => (
-                            <li
+                            <div
                                 key={module.id}
-                                className="border-l-4 border-yellow-500 pl-4 py-2 bg-base-200 rounded-md hover:bg-base-300 transition"
+                                className="collapse collapse-arrow bg-base-200 rounded-box"
                             >
-                                <div className="flex items-center justify-between">
-                                    <p className="font-bold">{idx + 1}. {module.title}</p>
-                                    <span className="text-gray-400">{module.lesson_count} Lessons</span>
+                                <input type="checkbox" />
+                                <div className="collapse-title text-xl font-medium">
+                                    {idx + 1}. {module.title}
+                                    <span className="text-gray-400 ml-2 font-light">({module.lesson_count} Lessons)</span>
                                 </div>
-                            </li>
+                                <div className="collapse-content">
+                                    {module.lessons.length === 0 ? (
+                                        <p className="text-gray-400 italic">No lessons added yet.</p>
+                                    ) : (
+                                        <ul className="space-y-2">
+                                            {module.lessons.map((lesson) => (
+                                                <li
+                                                    key={lesson.id}
+                                                    className="flex items-center justify-between bg-base-100 p-3 rounded-md border border-base-300 hover:bg-base-300 transition"
+                                                >
+                                                    <span className="flex items-center gap-2 font-medium">
+                                                        {getIcon(lesson.lecture_type)}
+                                                        {lesson.title}
+                                                    </span>
+                                                    {!lesson.is_published && (
+                                                        <span className="badge badge-warning text-xs">Unpublished</span>
+                                                    )}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )}
+                                </div>
+                            </div>
                         ))}
-                    </ul>
+                    </div>
                 </div>
+
+                {/* features */}
+                <CourseFeatures i_enrolled={course.i_enrolled} enrollNow={enrollNow}></CourseFeatures>
             </div>
         </section>
     );
