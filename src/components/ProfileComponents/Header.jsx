@@ -12,7 +12,6 @@ import { SlBadge } from "react-icons/sl";
 import CalendarHeatmap from 'react-calendar-heatmap';
 import 'react-calendar-heatmap/dist/styles.css';
 import CommonButton from '../Common/CommonButton';
-import axios from 'axios';
 import About from './About';
 import Badges from './Badges';
 import Achievements from './Achievements';
