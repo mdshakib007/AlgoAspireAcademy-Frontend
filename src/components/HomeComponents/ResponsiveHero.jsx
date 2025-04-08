@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { HashLink } from 'react-router-hash-link';
 import CommonButton from '../Common/CommonButton';
 
 const ResponsiveHero = () => {
@@ -18,12 +18,12 @@ const ResponsiveHero = () => {
                 </p>
 
                 <div className="flex flex-wrap justify-center md:justify-start gap-6 mt-6">
-                    <Link to="/dashboard">
+                    <HashLink to="/dashboard#">
                         <CommonButton>Start Learning</CommonButton>
-                    </Link>
-                    <Link to="/courses">
+                    </HashLink>
+                    <HashLink to="/courses#">
                         <CommonButton>Choose Course</CommonButton>
-                    </Link>
+                    </HashLink>
                 </div>
             </div>
 

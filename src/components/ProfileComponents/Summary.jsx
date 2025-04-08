@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import api from '../../api/axiosInstance';
 import { useParams, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import GlowingButton from '../Common/GlowingButton';
+import CommonButton from '../Common/CommonButton';
 import {MdDashboard} from 'react-icons/md';
 
 
@@ -109,7 +109,7 @@ const Summary = () => {
                     <ProgressCircle value={completed_assignment_count} total={total_assignment_count} label="Assignments Completed" />
                 </div>
                 <div className='flex justify-center mt-10'>
-                <Link to='/dashboard'><GlowingButton><MdDashboard />My Dashboard</GlowingButton></Link>
+                <Link to='/dashboard'><CommonButton><MdDashboard />My Dashboard</CommonButton></Link>
                 </div>
             </div>
         </div>

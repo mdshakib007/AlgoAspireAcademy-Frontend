@@ -1,5 +1,5 @@
 import CommonButton from '../Common/CommonButton';
-import { Link } from 'react-router-dom';
+import { HashLink } from 'react-router-hash-link';
 
 const ProgressTrackHero = () => {
     return (
@@ -27,9 +27,9 @@ const ProgressTrackHero = () => {
                 </p>
 
                 <div className="mt-6 w-fit mx-auto md:mx-0">
-                    <Link to="/courses">
+                    <HashLink to="/courses#">
                         <CommonButton>Enroll Now!</CommonButton>
-                    </Link>
+                    </HashLink>
                 </div>
             </div>
         </section>

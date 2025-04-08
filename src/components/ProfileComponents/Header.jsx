@@ -8,12 +8,10 @@ import GlowingButton from "../Common/GlowingButton";
 import { MdDashboard } from "react-icons/md";
 import { Link } from 'react-router-dom';
 import { IoTrophyOutline } from "react-icons/io5";
-import { SlBadge } from "react-icons/sl";
 import CalendarHeatmap from 'react-calendar-heatmap';
 import 'react-calendar-heatmap/dist/styles.css';
 import CommonButton from '../Common/CommonButton';
 import About from './About';
-import Badges from './Badges';
 import Achievements from './Achievements';
 import Summary from './Summary';
 import api from '../../api/axiosInstance';
@@ -111,7 +109,7 @@ const Header = ({ username }) => {
 
             {/* tabs */}
             <div className="tabs tabs-box tabs-lg mt-10 overflow-auto">
-                <label className="tab flex items-center gap-2">
+                <label className="tab flex items-center gap-2 text-xs sm:text-lg">
                     <input type="radio" name="profile_tabs" defaultChecked />
                     <FaLinesLeaning />
                     Summary
@@ -120,7 +118,7 @@ const Header = ({ username }) => {
                     <Summary></Summary>
                 </div>
 
-                <label className="tab flex items-center gap-2">
+                <label className="tab flex items-center gap-2 text-xs sm:text-lg">
                     <input type="radio" name="profile_tabs" />
                     <IoTrophyOutline />
                     Achievements
@@ -129,16 +127,7 @@ const Header = ({ username }) => {
                     <Achievements />
                 </div>
 
-                <label className="tab flex items-center gap-2">
-                    <input type="radio" name="profile_tabs" />
-                    <SlBadge />
-                    Badges
-                </label>
-                <div className="tab-content bg-gray-700 p-6">
-                    <Badges />
-                </div>
-
-                <label className="tab flex items-center gap-2">
+                <label className="tab flex items-center gap-2 text-xs sm:text-lg">
                     <input type="radio" name="profile_tabs" />
                     <FaRegUserCircle />
                     About

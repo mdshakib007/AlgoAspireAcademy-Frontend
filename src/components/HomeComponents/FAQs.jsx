@@ -4,7 +4,7 @@ import faqs from '../../data/faqs.js';
 
 const FAQs = () => {
     return (
-        <section className='container mx-auto px-4 md:px-8 lg:px-16 mt-24 mb-10'>
+        <section id='faqs' className='container mx-auto px-4 md:px-8 lg:px-16 mt-24 mb-10'>
             <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-10">
 
                 {/* Left - Text + FAQ Items */}

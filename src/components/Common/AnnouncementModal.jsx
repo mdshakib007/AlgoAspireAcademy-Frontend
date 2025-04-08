@@ -43,7 +43,7 @@ const AnnouncementModal = () => {
                 />
                 </div>
 
-                <p className="whitespace-pre-line border-t border-l border-gray-700 pt-2 pl-2">
+                <p className="whitespace-pre-line text-gray-300">
                     {announcement.message}
                 </p>
 

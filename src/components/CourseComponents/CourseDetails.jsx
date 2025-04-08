@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import api from "../../api/axiosInstance";
@@ -10,6 +10,8 @@ import { LuListTodo, LuFileQuestion, LuNotebookText } from "react-icons/lu";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { HashLink } from "react-router-hash-link";
 import CourseFeatures from "./CourseFeatures";
+import { AuthContext } from "../../context/AuthContext";
+import toast from "react-hot-toast";
 
 
 const getIcon = (type) => {
@@ -32,6 +34,7 @@ const CourseDetail = () => {
     const [course, setCourse] = useState(null);
     const { idAndSlug } = useParams();
     const navigate = useNavigate();
+    const { user, fetchMe } = useContext(AuthContext);
 
     // Split the parameter into id and slug
     const [id, slug] = idAndSlug ? idAndSlug.split('-') : [];
@@ -48,8 +51,19 @@ const CourseDetail = () => {
             .catch(err => console.error(err));
     }, [id, slug, navigate]);
 
-    const enrollNow = () => {
-        console.log("enroll");
+    const enrollNow = async () => {
+        if (!user) fetchMe();
+        if (!user) {
+            toast.error("Please login to enroll a course");
+            return;
+        }
+
+        try {
+            await api.post('/api/enrollment/create/', { course: id })
+        } catch (err) {
+            if (err.response) toast.error(err.response.data.error);
+            else toast.error("An error occurred");
+        }
     }
 
     if (!course) {

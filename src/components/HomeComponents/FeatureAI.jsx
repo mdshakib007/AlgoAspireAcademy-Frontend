@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { IoSend } from "react-icons/io5";
 import CommonButton from '../Common/CommonButton';
-import { Link } from 'react-router-dom';
+import { HashLink } from 'react-router-hash-link';
+
 
 const FeatureAI = () => {
     const prompts = useMemo(() => [
@@ -76,16 +77,12 @@ const FeatureAI = () => {
                 </p>
 
                 <div className="flex flex-wrap justify-center md:justify-start gap-6 my-6">
-                    <Link to="/courses">
+                    <HashLink to="/courses#">
                         <CommonButton>See Courses</CommonButton>
-                    </Link>
-                    <a
-                        href="https://youtube.com/@AlgoAspire/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
+                    </HashLink>
+                    <HashLink to="/courses#">
                         <CommonButton>Ask AI</CommonButton>
-                    </a>
+                    </HashLink>
                 </div>
             </div>
 

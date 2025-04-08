@@ -6,7 +6,7 @@ import { FaVideo, FaBook } from "react-icons/fa";
 import GlowingButton from '../Common/GlowingButton';
 import features from '../../data/features';
 import FeatureCard from './FeatureCard';
-import { Link } from 'react-router-dom';
+import { HashLink } from 'react-router-hash-link';
 import { AuthContext } from '../../context/AuthContext';
 
 
@@ -94,11 +94,11 @@ const FeatureCards = () => {
                         transition={{ duration: 0.4, ease: "easeInOut" }}
                     >
                         <h1 className="text-xl font-bold text-white mb-4">Want to Start?</h1>
-                        <Link to='/dashboard'>
+                        <HashLink to='/dashboard#'>
                             <GlowingButton>
                                 {user ? 'Dashboard' : 'Get Started'}
                             </GlowingButton>
-                        </Link>
+                        </HashLink>
                     </motion.div>
                 </div>
             </div>

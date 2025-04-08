@@ -1,6 +1,6 @@
 import { FaExternalLinkAlt } from 'react-icons/fa';
 import CommonButton from '../Common/CommonButton';
-import { Link } from 'react-router-dom';
+import { HashLink } from 'react-router-hash-link';
 
 const HeroSection = () => {
     return (
@@ -21,9 +21,9 @@ const HeroSection = () => {
                 </p>
 
                 <div className="flex flex-wrap justify-center md:justify-start gap-6 mt-6">
-                    <Link to="/courses">
+                    <HashLink to="/courses#">
                         <CommonButton>Browse Courses</CommonButton>
-                    </Link>
+                    </HashLink>
                     <a href="https://youtube.com/@AlgoAspire/" target="_blank" rel="noopener noreferrer">
                         <CommonButton>YouTube <FaExternalLinkAlt className="ml-2" /></CommonButton>
                     </a>

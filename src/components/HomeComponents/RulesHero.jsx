@@ -1,5 +1,5 @@
 import CommonButton from '../Common/CommonButton';
-import { Link } from 'react-router-dom';
+import { HashLink } from 'react-router-hash-link';
 
 const RulesHero = () => {
     return (
@@ -26,12 +26,12 @@ const RulesHero = () => {
                 </p>
 
                 <div className="flex flex-wrap justify-center md:justify-start gap-6 mt-6">
-                    <Link to="/rules">
+                    <HashLink to="/rules#">
                         <CommonButton>See Rules</CommonButton>
-                    </Link>
-                    <Link to="/courses">
+                    </HashLink>
+                    <HashLink to="/courses#">
                         <CommonButton>Choose Course</CommonButton>
-                    </Link>
+                    </HashLink>
                 </div>
             </div>
         </section>
