@@ -68,6 +68,14 @@ const LoginForm = ({ closeModal }) => { // Accept closeModal prop
             <CommonButton type="submit" className="btn w-full" disabled={loading}>
                 {loading ? "Logging in..." : "Login"}
             </CommonButton>
+            <p className="text-sm">
+                By logging in, you agree to AlgoAspire's <span 
+                className="text-yellow-500 underline cursor-pointer">
+                    terms of service
+                </span> & <span className="text-yellow-500 underline cursor-pointer">
+                    privacy policy
+                </span>.
+            </p>
         </form>
     );
 };

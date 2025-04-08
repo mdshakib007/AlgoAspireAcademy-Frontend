@@ -1,6 +1,5 @@
 import { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
 import api from "../../api/axiosInstance";
 import CommonButton from "../Common/CommonButton";
 import { MdAssignmentAdd, MdOutlineQuiz, MdOndemandVideo } from "react-icons/md";
@@ -91,10 +90,10 @@ const CourseDetail = () => {
                         <p>
                             <span className="opacity-70">Instructor:</span>{" "}
                             <span className="font-semibold text-yellow-500 hover:underline cursor-pointer">
-                                <Link
-                                    to={`/profile/${course.instructor_name}`}>
+                                <HashLink
+                                    to={`/profile/${course.instructor_name}#`}>
                                     {course.instructor_name}
-                                </Link>
+                                </HashLink>
                             </span>
                         </p>
                         <div className="flex flex-wrap gap-4 mt-4">
@@ -106,9 +105,9 @@ const CourseDetail = () => {
                         </div>
                         <div className="flex gap-4 mt-6">
                             {
-                                course.i_enrolled ? <Link>
+                                course.i_enrolled ? <HashLink to={`/my-learning/course/${course.id}-${course.slug}#`}>
                                     <CommonButton>Continue Learning</CommonButton>
-                                </Link> :
+                                </HashLink> :
                                     <CommonButton onClick={enrollNow}>Enroll Now</CommonButton>
                             }
                             <HashLink to='#features'>

@@ -13,6 +13,7 @@ import NotFound from "../pages/NotFound";
 import CourseDetails from "../components/CourseComponents/CourseDetails";
 import MyCourses from "../pages/MyCourses";
 import MyLearning from "../pages/MyLearning";
+import PrivacyPolicy from "../pages/PrivacyPolicy";
 
 
 const AppRouter = () => {
@@ -59,6 +60,8 @@ const AppRouter = () => {
                         <Route index path="/login" element={<Login />} />
                         <Route index path="/register" element={<Register />} />
                         <Route index path="/dashboard" element={<Dashboard />} />
+                        <Route index path="/privacy" element={<PrivacyPolicy />} />
+                        <Route index path="/terms" element={<Dashboard />} />
                         <Route path="*" element={<NotFound />} />
                     </Route>
                 </Routes>
