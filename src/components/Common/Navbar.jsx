@@ -216,7 +216,7 @@ const Navbar = ({ modalRef }) => {
                                         </HashLink>
                                     </li>
                                     <li>
-                                        <HashLink to="/my-courses#">
+                                        <HashLink to="/my-learning#">
                                             <FaHourglassStart /> Continue Learning
                                         </HashLink>
                                     </li>

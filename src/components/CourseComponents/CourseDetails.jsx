@@ -61,7 +61,7 @@ const CourseDetail = () => {
         try {
             await api.post('/api/enrollment/create/', { course: id });
             toast.success("Enrollment Success!");
-            navigate('/my-courses');
+            navigate('/my-learning');
         } catch (err) {
             if (err.response) toast.error(err.response.data.error);
             else toast.error("An error occurred");

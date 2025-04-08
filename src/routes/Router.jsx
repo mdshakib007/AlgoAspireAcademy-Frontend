@@ -12,6 +12,7 @@ import Settings from "../pages/Settings";
 import NotFound from "../pages/NotFound";
 import CourseDetails from "../components/CourseComponents/CourseDetails";
 import MyCourses from "../pages/MyCourses";
+import MyLearning from "../pages/MyLearning";
 
 
 const AppRouter = () => {
@@ -52,7 +53,8 @@ const AppRouter = () => {
                         <Route index path="/profile/:username" element={<Profile />} />
                         <Route index path="/settings" element={<Settings />} />
                         <Route index path="/courses" element={<Courses />} />
-                        <Route index path="/my-courses" element={<MyCourses />} />
+                        <Route index path="/my-learning" element={<MyCourses />} />
+                        <Route index path="/my-learning/course/:idAndSlug" element={<MyLearning />} />
                         <Route index path="/course/:idAndSlug" element={<CourseDetails />} />
                         <Route index path="/login" element={<Login />} />
                         <Route index path="/register" element={<Register />} />
