@@ -97,7 +97,6 @@ const Header = ({ username }) => {
                 />
                 <LoadUsername currentUser={currentUser}></LoadUsername>
                 {currentUser.full_name && <h3 className='text-2xl md:text-3xl text-gray-300 font-bold'>{currentUser.full_name}</h3>}
-                {currentUser.bio && <p className='text-gray-300 mx-2'>{currentUser.bio}</p>}
             </div>
             {
                 user?.username === username &&

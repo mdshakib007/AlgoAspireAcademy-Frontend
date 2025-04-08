@@ -15,7 +15,6 @@ import {
 import { FaGear } from "react-icons/fa6";
 import { RiDashboardHorizontalFill, RiPagesFill } from "react-icons/ri";
 import Headroom from 'react-headroom';
-import { TiThMenu } from "react-icons/ti";
 
 
 const Navbar = ({ modalRef }) => {

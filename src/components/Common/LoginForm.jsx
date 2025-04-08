@@ -27,7 +27,6 @@ const LoginForm = ({ closeModal }) => { // Accept closeModal prop
             // Close modal and reset form on success
             closeModal();
             reset();
-            navigate("/dashboard");
         } catch (err) {
             setServerError("Invalid credentials or server error.");
         }
