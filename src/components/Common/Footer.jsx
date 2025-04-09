@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { HashLink } from 'react-router-hash-link';
 
 
 const Footer = () => {
@@ -9,36 +9,36 @@ const Footer = () => {
                 <div className="footer sm:footer-horizontal p-10">
                     <nav>
                         <h6 className="footer-title">Company & Legal</h6>
-                        <Link to='/about'>
+                        <HashLink to='/about#'>
                             <p className="link link-hover">About us</p>
-                        </Link>
-                        <Link to='/contact'>
+                        </HashLink>
+                        <HashLink to='/contact#'>
                             <p className="link link-hover">Contact</p>
-                        </Link>
-                        <Link to='/terms'>
+                        </HashLink>
+                        <HashLink to='/terms#'>
                             <p className="link link-hover">Terms & Condition</p>
-                        </Link>
-                        <Link to='/privacy'>
+                        </HashLink>
+                        <HashLink to='/privacy#'>
                             <p className="link link-hover">Privacy policy</p>
-                        </Link>
-                        <Link to='/privacy'>
-                            <p className="link link-hover">Cookie policy</p>
-                        </Link>
+                        </HashLink>
+                        <HashLink to='/credit#'>
+                            <p className="link link-hover">Credits</p>
+                        </HashLink>
                     </nav>
                     <nav>
                         <h6 className="footer-title">Quick Links</h6>
-                        <Link to='/courses'>
+                        <HashLink to='/courses#'>
                             <p className="link link-hover">All Courses</p>
-                        </Link>
-                        <Link to='cp-course'>
+                        </HashLink>
+                        <HashLink to='cp-course#'>
                             <p className="link link-hover">Competitive Programming</p>
-                        </Link>
-                        <Link to='/forum'>
+                        </HashLink>
+                        <HashLink to='/forum#'>
                             <p className="link link-hover">Forum</p>
-                        </Link>
-                        <Link to='/leaderboard'>
+                        </HashLink>
+                        <HashLink to='/leaderboard#'>
                             <p className="link link-hover">Leaderboard</p>
-                        </Link>
+                        </HashLink>
                     </nav>
                     <nav>
                         <h6 className="footer-title">Social Media</h6>
@@ -47,7 +47,7 @@ const Footer = () => {
                     </nav>
                 </div>
                 <p className="text-sm text-center pb-5 text-gray-300">
-                    &copy; AlgoAspire-Academy {new Date().getFullYear()}.
+                    &copy; AlgoAspire-Academy {new Date().getFullYear()}. <span className='text-gray-500'>(V1.0.0)</span>
                 </p>
             </footer>
         </div>

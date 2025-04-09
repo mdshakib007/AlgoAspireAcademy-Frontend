@@ -153,7 +153,7 @@ const PrivacyPolicy = () => {
                 Email:{" "}
                 <a
                     href="mailto:algoaspire.academy@gmail.com"
-                    className="text-blue-600 underline"
+                    className="text-yellow-500 underline"
                 >
                     algoaspire.academy@gmail.com
                 </a>
@@ -161,7 +161,7 @@ const PrivacyPolicy = () => {
             <p className="mb-4">
                 By using our Platform, you acknowledge that you have read and understood this Privacy Policy and agree to our collection, processing, and disclosure practices as described herein.
             </p>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-300">
                 This privacy policy is provided for informational purposes and should be reviewed by legal counsel to ensure compliance with applicable laws and regulations.
             </p>
         </div>

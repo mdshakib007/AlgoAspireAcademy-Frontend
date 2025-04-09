@@ -14,6 +14,10 @@ import CourseDetails from "../components/CourseComponents/CourseDetails";
 import MyCourses from "../pages/MyCourses";
 import MyLearning from "../pages/MyLearning";
 import PrivacyPolicy from "../pages/PrivacyPolicy";
+import Terms from "../pages/Terms";
+import Contact from "../pages/Contact";
+import About from "../pages/About";
+import Credit from "../pages/Credit";
 
 
 const AppRouter = () => {
@@ -61,7 +65,10 @@ const AppRouter = () => {
                         <Route index path="/register" element={<Register />} />
                         <Route index path="/dashboard" element={<Dashboard />} />
                         <Route index path="/privacy" element={<PrivacyPolicy />} />
-                        <Route index path="/terms" element={<Dashboard />} />
+                        <Route index path="/terms" element={<Terms />} />
+                        <Route index path="/contact" element={<Contact />} />
+                        <Route index path="/about" element={<About />} />
+                        <Route index path="/credit" element={<Credit />} />
                         <Route path="*" element={<NotFound />} />
                     </Route>
                 </Routes>
