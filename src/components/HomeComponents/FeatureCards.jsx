@@ -94,11 +94,18 @@ const FeatureCards = () => {
                         transition={{ duration: 0.4, ease: "easeInOut" }}
                     >
                         <h1 className="text-xl font-bold text-white mb-4">Want to Start?</h1>
-                        <HashLink to='/dashboard#'>
-                            <GlowingButton>
-                                {user ? 'Dashboard' : 'Get Started'}
-                            </GlowingButton>
-                        </HashLink>
+                        {
+                            user ? <HashLink to='/my-learning#'>
+                                <GlowingButton>
+                                    Continue Learning
+                                </GlowingButton>
+                            </HashLink> :
+                                <HashLink to='/courses#'>
+                                    <GlowingButton>
+                                        Get Started
+                                    </GlowingButton>
+                                </HashLink>
+                        }
                     </motion.div>
                 </div>
             </div>

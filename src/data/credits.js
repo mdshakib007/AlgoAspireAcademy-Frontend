@@ -104,8 +104,20 @@ const credits = [
         link: "https://headlessui.com/"
     },
     {
-        title: "UI Inspirations",
+        title: "Few UI Inspirations",
         link: "https://youkn0wwho.academy/",
+    },
+    {
+        title: "SVG Images",
+        link: "https://undraw.co/",
+    },
+    {
+        title: "Few PNG Images",
+        link: "http://freepik.com/",
+    },
+    {
+        title: "Few Icons From",
+        link: "https://www.flaticon.com/",
     },
     {
         title: "Designed & Developed By",

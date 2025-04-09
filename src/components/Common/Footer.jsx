@@ -21,6 +21,9 @@ const Footer = () => {
                         <HashLink to='/privacy#'>
                             <p className="link link-hover">Privacy policy</p>
                         </HashLink>
+                        <HashLink to='/rules#'>
+                            <p className="link link-hover">Rules & Guidelines</p>
+                        </HashLink>
                         <HashLink to='/credit#'>
                             <p className="link link-hover">Credits</p>
                         </HashLink>

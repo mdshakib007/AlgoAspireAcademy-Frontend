@@ -1,22 +1,21 @@
 import { useForm } from "react-hook-form";
 import { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import CommonButton from "./CommonButton";
+import { HashLink } from "react-router-hash-link";
 
 
-const LoginForm = ({ closeModal }) => { // Accept closeModal prop
+const LoginForm = ({ closeModal }) => {
     const {
         register,
         handleSubmit,
         formState: { errors },
-        reset, // Reset form after login
+        reset,
     } = useForm();
 
     const { login } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [serverError, setServerError] = useState("");
-    const navigate = useNavigate();
 
     const onSubmit = async (data) => {
         setLoading(true);
@@ -69,12 +68,17 @@ const LoginForm = ({ closeModal }) => { // Accept closeModal prop
                 {loading ? "Logging in..." : "Login"}
             </CommonButton>
             <p className="text-sm">
-                By logging in, you agree to AlgoAspire's <span 
-                className="text-yellow-500 underline cursor-pointer">
+                By logging in, you agree to AlgoAspire's <HashLink
+                    className="text-yellow-500 underline cursor-pointer" 
+                    to='/terms#' 
+                    onClick={closeModal}>
                     terms of service
-                </span> & <span className="text-yellow-500 underline cursor-pointer">
+                </HashLink> & <HashLink 
+                className="text-yellow-500 underline cursor-pointer" 
+                to='/privacy#' 
+                onClick={closeModal}>
                     privacy policy
-                </span>.
+                </HashLink>.
             </p>
         </form>
     );

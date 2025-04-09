@@ -46,7 +46,7 @@ const About = () => {
                     <p className="mt-2">{bio || "N/A"}</p>
                     {
                         portfolio && (
-                            <a href={portfolio} target="_blank" rel="noopener noreferrer" className="text-blue-400 flex items-center gap-2 mt-2 hover:underline">
+                            <a href={portfolio} target="_blank" rel="noopener noreferrer" className="text-yellow-500 flex items-center gap-2 mt-2 hover:underline">
                                 <FaLink /> Portfolio
                             </a>
                         )
