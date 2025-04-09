@@ -1,18 +1,52 @@
 import React, { useState } from 'react';
-import { BiWorld } from "react-icons/bi";
-import { PiHandsClapping, PiShareFatLight } from "react-icons/pi";
+import { BiWorld, BiUpvote } from "react-icons/bi";
+import { PiShareFatLight } from "react-icons/pi";
 import { FaRegCommentAlt } from "react-icons/fa";
 import { CiRead } from "react-icons/ci";
 import { handleVote, copyLink } from '../../utils/postActions';
-import { BiSolidUpvote, BiUpvote } from "react-icons/bi";
 import { HashLink } from 'react-router-hash-link';
+import {
+    MdOutlineStickyNote2,
+    MdOutlineFeedback,
+    MdEdit,
+    MdOutlineCampaign,
+    MdOutlineSchool
+} from 'react-icons/md';
+import { LuFileQuestion } from "react-icons/lu";
 
+
+const postTypeStyles = {
+    note: {
+        icon: <MdOutlineStickyNote2 size={16} />,
+        className: 'bg-blue-500 text-white'
+    },
+    question: {
+        icon: <LuFileQuestion size={16} />,
+        className: 'bg-purple-500 text-white'
+    },
+    feedback: {
+        icon: <MdOutlineFeedback size={16} />,
+        className: 'bg-green-500 text-white'
+    },
+    editorial: {
+        icon: <MdEdit size={16} />,
+        className: 'bg-pink-500 text-white'
+    },
+    announcement: {
+        icon: <MdOutlineCampaign size={16} />,
+        className: 'bg-red-500 text-white'
+    },
+    tutorial: {
+        icon: <MdOutlineSchool size={16} />,
+        className: 'bg-yellow-500 text-black'
+    }
+};
 
 const Post = ({ post }) => {
     const {
-        id, title, image, lesson, post_type,
-        tags, vote_count, comment_count,
-        created_at, user, username, user_image, views
+        id, title, lesson, post_type,
+        vote_count, comment_count,
+        created_at, username, user_image, views
     } = post;
 
     const [totalVotes, setTotalVotes] = useState(vote_count);
@@ -26,7 +60,17 @@ const Post = ({ post }) => {
                 <HashLink className='flex gap-4 items-center' to={`/profile/${username}#`}>
                     <img src={user_image || '/default-user.png'} alt={username} className='h-14 w-14 rounded-full' />
                     <div>
-                        <h4 className='text-lg font-bold'>{username}</h4>
+                        <div className='flex items-center gap-2'>
+                            <h4 className='text-lg font-bold'>{username}</h4>
+                            <div className="flex items-center gap-2 mb-2">
+                                {post_type && (
+                                    <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold ${postTypeStyles[post_type]?.className}`}>
+                                        {postTypeStyles[post_type]?.icon}
+                                        {post_type.charAt(0).toUpperCase() + post_type.slice(1)}
+                                    </span>
+                                )}
+                            </div>
+                        </div>
                         <p className='text-sm text-gray-300 flex items-center gap-1'>
                             {created_at.slice(0, 10)} • <BiWorld />
                         </p>
@@ -37,8 +81,8 @@ const Post = ({ post }) => {
                 </p>
             </div>
 
-            <div className="cursor-pointer hover:text-yellow-500" onClick={handleRedirect}>
-                <h1 className='text-2xl md:text-4xl font-bold p-3'>{title}</h1>
+            <div className="cursor-pointer hover:text-yellow-500 px-3" onClick={handleRedirect}>
+                <h1 className='text-2xl md:text-3xl font-bold'>{title}</h1>
             </div>
 
             <div className='px-3 text-gray-300 text-sm mt-5'>

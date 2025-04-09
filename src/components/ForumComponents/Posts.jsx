@@ -4,26 +4,69 @@ import api from '../../api/axiosInstance'
 import toast from 'react-hot-toast';
 import Post from './Post';
 import AnnouncementCard from '../CourseComponents/AnnouncementCard';
+import CommonButton from '../Common/CommonButton';
+import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
+import { FaMagnifyingGlass } from "react-icons/fa6";
+import { scrollToTop } from '../../utils/scrollToTop';
 
 
 const Posts = () => {
     const [posts, setPosts] = useState([]);
     const [announcements, setAnnouncements] = useState([]);
+    const [nextPage, setNextPage] = useState(null);
+    const [previousPage, setPreviousPage] = useState(null);
+    const [totalPostCount, setTotalPostCount] = useState(0);
+    const [searchTitle, setSearchTitle] = useState('');
+    const [shouldScroll, setShouldScroll] = useState(false);
 
-    const fetchPosts = async (postType = '') => {
+
+    const fetchPosts = async (url = `/api/discussion/post/list/`, postType = '', title = '') => {
         try {
-            const response = await api.get(`/api/discussion/post/list/?post_type=${postType}&access_type=Public&paginated=true`, {
+            const response = await api.get(url, {
                 params: {
                     post_type: postType || undefined,
                     access_type: 'Public',
                     paginated: true,
+                    title: title || undefined,
                 },
             });
             setPosts(response.data.results);
+            setNextPage(response.data.next);
+            setPreviousPage(response.data.previous);
+            setTotalPostCount(response.data.count);
         } catch (error) {
             toast.error('Failed to fetch posts');
         }
     };
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        fetchPosts(`/api/discussion/post/list/`, '', searchTitle);
+    };
+
+    const handleNext = () => {
+        if (nextPage) {
+            fetchPosts(nextPage, '', searchTitle);
+            setShouldScroll(true);
+            toast.success("Switched to next page");
+        }
+    };
+
+    const handlePrevious = () => {
+        if (previousPage) {
+            fetchPosts(previousPage, '', searchTitle);
+            setShouldScroll(true);
+            toast.success("Switched to previous page");
+        }
+    };
+
+    useEffect(() => {
+        if (shouldScroll) {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setShouldScroll(false);
+        }
+    }, [posts]);
+
 
     useEffect(() => {
         fetchPosts();
@@ -34,11 +77,21 @@ const Posts = () => {
             .catch((err) => console.error("Error fetching announcements", err));
     }, []);
 
-    console.log(posts);
-
     return (
         <div className='container mx-auto px-4'>
-            <Header onFilterChange={fetchPosts} />
+            <Header onFilterChange={(postType) => fetchPosts(`/api/discussion/post/list/`, postType, searchTitle)} />
+
+            {/* Search Bar */}
+            <form onSubmit={handleSearch} className="my-6 flex items-center gap-4">
+                <input
+                    type="text"
+                    placeholder="Search posts by title..."
+                    value={searchTitle}
+                    onChange={(e) => setSearchTitle(e.target.value)}
+                    className="flex-grow px-4 py-2 rounded-full bg-gray-800 text-white placeholder-gray-400 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                />
+                <CommonButton type="submit"><FaMagnifyingGlass />Search</CommonButton>
+            </form>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
                 {/* Announcements Section */}
@@ -67,6 +120,17 @@ const Posts = () => {
                             ))}
                         </div>
                     )}
+                    <div className='flex justify-between items-center gap-4 my-5'>
+                        <CommonButton onClick={handlePrevious} disabled={!previousPage}>
+                            <FaArrowLeft /> Previous
+                        </CommonButton>
+
+                        <p className="text-gray-400 text-sm">{posts.length} / {totalPostCount}</p>
+
+                        <CommonButton onClick={handleNext} disabled={!nextPage}>
+                            Next <FaArrowRight />
+                        </CommonButton>
+                    </div>
                 </section>
             </div>
         </div>
