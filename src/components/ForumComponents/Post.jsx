@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { BiWorld, BiUpvote } from "react-icons/bi";
 import { PiShareFatLight } from "react-icons/pi";
 import { FaRegCommentAlt } from "react-icons/fa";
 import { CiRead } from "react-icons/ci";
 import { handleVote, copyLink } from '../../utils/postActions';
 import { HashLink } from 'react-router-hash-link';
+import { useNavigate } from 'react-router-dom';
 import {
     MdOutlineStickyNote2,
     MdOutlineFeedback,
@@ -13,6 +14,8 @@ import {
     MdOutlineSchool
 } from 'react-icons/md';
 import { LuFileQuestion } from "react-icons/lu";
+import toast from 'react-hot-toast';
+import { AuthContext } from '../../context/AuthContext';
 
 
 const postTypeStyles = {
@@ -43,6 +46,10 @@ const postTypeStyles = {
 };
 
 const Post = ({ post }) => {
+    const navigate = useNavigate();
+
+    const {user} = useContext(AuthContext);
+
     const {
         id, title, lesson, post_type,
         vote_count, comment_count,
@@ -52,6 +59,28 @@ const Post = ({ post }) => {
     const [totalVotes, setTotalVotes] = useState(vote_count);
 
     const handleRedirect = () => {
+        navigate(`/forum/post/${id}`);
+    };
+
+    const toggleVote = async () => {
+        if (!user) return toast.error("You must be logged in to vote.");
+
+        try {
+            const voteRes = await handleVote(id);
+            
+            if (voteRes.success === "Vote added!") {
+                toast.success("Vote added!");
+                setTotalVotes(totalVotes + 1);
+            } else if (voteRes.success === "Vote removed!") {
+                toast.success("Vote removed!");
+                setTotalVotes(totalVotes - 1);
+            } else {
+                toast("Unknown response");
+            }
+        } catch (err) {
+            console.error(err);
+            toast.error("An error occurred");
+        }
     };
 
     return (
@@ -92,18 +121,19 @@ const Post = ({ post }) => {
             <div className='flex justify-between items-center m-3 border-y border-black py-2 text-gray-300'>
                 <button
                     className='flex-1 flex justify-center items-center btn btn-outline border-none text-sm md:text-lg px-2 py-1'
-                    onClick={handleVote}
+                    onClick={toggleVote}
                 >
                     <BiUpvote /> {totalVotes} Votes
                 </button>
                 <button
                     className='flex-1 flex justify-center items-center btn btn-outline border-none text-sm md:text-lg px-2 py-1'
+                    onClick={handleRedirect}
                 >
                     <FaRegCommentAlt /> {comment_count} Comment
                 </button>
                 <button
                     className='flex-1 flex justify-center items-center btn btn-outline border-none text-sm md:text-lg px-2 py-1'
-                    onClick={() => copyLink('link.')}
+                    onClick={() => copyLink(`https://algoaspire-academy.vercel.app/forum/post/${id}`)}
                 >
                     <PiShareFatLight /> Share
                 </button>

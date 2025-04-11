@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../../api/axiosInstance";
-import { Link } from "react-router-dom";
+import { HashLink } from "react-router-hash-link";
 import CommonButton from "../Common/CommonButton";
 
 const CourseList = () => {
@@ -41,16 +41,16 @@ const CourseList = () => {
                                     <p className="text-sm mt-1">
                                         <span className="opacity-70">By </span>
                                         <span className="font-semibold text-yellow-500 hover:underline cursor-pointer">
-                                            <Link
-                                                to={`/profile/${course.instructor_name}`}>
+                                            <HashLink
+                                                to={`/profile/${course.instructor_name}#`}>
                                                 {course.instructor_name}
-                                            </Link>
+                                            </HashLink>
                                         </span>
                                     </p>
                                     <div className="text-right">
-                                        <Link to={`/course/${course.id}-${course.slug}`}>
+                                        <HashLink to={`/course/${course.id}-${course.slug}#`}>
                                             <CommonButton>View Course</CommonButton>
-                                        </Link>
+                                        </HashLink>
                                     </div>
                                 </div>
                             </div>

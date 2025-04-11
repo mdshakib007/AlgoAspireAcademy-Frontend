@@ -13,7 +13,7 @@ const CommonButton = ({
       disabled={disabled}
       className={`
         inline-flex items-center justify-center gap-2
-        text-black font-semibold text-base md:text-lg
+        text-black font-semibold text-sm md:text-lg
         bg-gradient-to-r from-yellow-500 to-yellow-600 
         hover:from-yellow-600 hover:to-yellow-700
         focus:outline-none focus:ring-4 focus:ring-yellow-300

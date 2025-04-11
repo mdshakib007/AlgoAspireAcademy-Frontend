@@ -3,7 +3,7 @@ import React from 'react';
 const SimpleButton = ({ children, className = '', ...props }) => {
     return (
         <button
-            className={`btn border-none text-lg bg-transparent relative overflow-hidden hover:text-yellow-500 group ${className}`}
+            className={`btn border-none text-sm lg:text-lg bg-transparent relative overflow-hidden hover:text-yellow-500 group ${className}`}
             {...props}
         >
             {children}
