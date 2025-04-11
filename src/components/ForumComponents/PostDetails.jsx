@@ -5,14 +5,19 @@ import { BiWorld, BiUpvote } from "react-icons/bi";
 import { FaRegCommentAlt, FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { PiShareFatLight } from "react-icons/pi";
 import { CiRead } from "react-icons/ci";
-import { MdOutlineStickyNote2, MdOutlineFeedback, MdEdit, MdOutlineCampaign, MdOutlineSchool } from 'react-icons/md';
+import {
+    MdOutlineStickyNote2, MdOutlineFeedback, MdEdit,
+    MdOutlineCampaign, MdOutlineSchool,
+    MdMoreVert, MdOutlineReport, MdDeleteOutline
+} from 'react-icons/md';
 import { LuFileQuestion } from "react-icons/lu";
-import { handleVote, handleComment, fetchCommentList, copyLink } from '../../utils/postActions';
+import { handleVote, handleComment, copyLink } from '../../utils/postActions';
 import api from '../../api/axiosInstance';
 import toast from 'react-hot-toast';
 import CommonButton from '../Common/CommonButton';
 import CustomMarkdown from '../Common/CustomMarkdown';
 import { AuthContext } from '../../context/AuthContext';
+
 
 
 const postTypeStyles = {
@@ -25,7 +30,9 @@ const postTypeStyles = {
 };
 
 const PostDetails = () => {
+    const { user } = useContext(AuthContext);
     const { postId } = useParams();
+
     const [post, setPost] = useState(null);
     const [comments, setComments] = useState([]);
     const [commentInput, setCommentInput] = useState('');
@@ -34,7 +41,8 @@ const PostDetails = () => {
     const [previous, setPrevious] = useState(null);
     const [next, setNext] = useState(null);
     const [totalComments, setTotalComments] = useState(0);
-    const {user} = useContext(AuthContext);
+    const [editingCommentId, setEditingCommentId] = useState(null);
+    const [editingContent, setEditingContent] = useState('');
 
     const loadPost = async () => {
         try {
@@ -66,9 +74,14 @@ const PostDetails = () => {
         if (!commentInput.trim()) return toast.error("Empty comment box");
 
         try {
-            await handleComment(postId, commentInput);
+            const response = await handleComment(postId, commentInput);
+            setComments((prevComments) => ({
+                ...prevComments,
+                count: prevComments.count + 1,
+                results: [response, ...prevComments.results]
+            }));
+            setTotalComments(totalComments+1);
             setCommentInput('');
-            loadComments();
             toast.success("Comment added!");
         } catch {
             toast.error("Failed to comment.");
@@ -107,6 +120,60 @@ const PostDetails = () => {
         }
     };
 
+    const handleEdit = (commentId, content) => {
+        setEditingCommentId(commentId);
+        setEditingContent(content);
+    };
+
+    const submitEdit = async (commentId) => {
+        try {
+            const response = await api.put(`/api/discussion/comment/edit/${commentId}/`, {
+                content: editingContent
+            });
+            toast.success("Comment updated");
+            setEditingCommentId(null);
+            setEditingContent('');
+
+            setComments((prevComments) => {
+                const newResults = prevComments.results.map((comment) =>
+                    comment.id === commentId ? response.data : comment
+                );
+                return { ...prevComments, results: newResults };
+            });
+        } catch {
+            toast.error("Failed to update comment");
+        }
+    };
+
+    const handleDelete = async (commentId) => {
+        try {
+            await api.delete(`/api/discussion/comment/delete/${commentId}/`);
+            toast.success("Comment deleted");
+
+            setComments((prevComments) => {
+                const newResults = prevComments.results.filter(
+                    (comment) => comment.id !== commentId
+                );
+                setTotalComments(totalComments-1);
+                return {
+                    ...prevComments,
+                    count: prevComments.count - 1,
+                    results: newResults,
+                };
+            });
+        } catch {
+            toast.error("An error occurred");
+        }
+    };
+
+    const handleReport = (commentId) => {
+        console.log(commentId);
+    };
+
+    const handleShare = (commentId) => {
+        copyLink(`https://algoaspire-academy.vercel.app/forum/post/${postId}/comments/${commentId}`);
+    };
+
     useEffect(() => {
         loadPost();
         loadComments();
@@ -116,7 +183,7 @@ const PostDetails = () => {
 
     const {
         username, user_image, created_at, title,
-        body, post_type, views, comment_count
+        body, post_type, views
     } = post;
 
     return (
@@ -127,8 +194,8 @@ const PostDetails = () => {
                     <div className='flex items-center gap-4'>
                         <img src={user_image || '/default-user.png'} className='h-12 w-12 rounded-full' />
                         <div>
-                            <h4 className='font-bold text-lg'>{username}</h4>
-                            <p className='text-sm text-gray-400 flex items-center gap-2'>
+                            <h4 className='font-bold text-sm md:text-lg'>{username}</h4>
+                            <p className='text-xs md:text-sm text-gray-400 flex items-center gap-2'>
                                 {created_at.slice(0, 10)} • <BiWorld />
                             </p>
                         </div>
@@ -154,18 +221,18 @@ const PostDetails = () => {
             {/* Actions */}
             <div className='flex justify-between items-center m-3 border-y border-black py-2 text-gray-300'>
                 <button
-                    className='flex-1 flex justify-center items-center btn btn-outline border-none text-sm md:text-lg px-2 py-1'
+                    className='flex-1 flex justify-center items-center btn btn-outline border-none text-xs md:text-lg px-2 py-1'
                     onClick={toggleVote}
                 >
                     <BiUpvote /> {totalVotes} Votes
                 </button>
                 <button
-                    className='flex-1 flex justify-center items-center btn btn-outline border-none text-sm md:text-lg px-2 py-1'
+                    className='flex-1 flex justify-center items-center btn btn-outline border-none text-xs md:text-lg px-2 py-1'
                 >
-                    <FaRegCommentAlt /> {comment_count} Comment
+                    <FaRegCommentAlt /> {totalComments} Comment
                 </button>
                 <button
-                    className='flex-1 flex justify-center items-center btn btn-outline border-none text-sm md:text-lg px-2 py-1'
+                    className='flex-1 flex justify-center items-center btn btn-outline border-none text-xs md:text-lg px-2 py-1'
                     onClick={() => copyLink(`https://algoaspire-academy.vercel.app/forum/post/${postId}`)}
                 >
                     <PiShareFatLight /> Share
@@ -188,18 +255,78 @@ const PostDetails = () => {
 
             {/* Comments */}
             <h1 className='my-2 text-lg font-semibold'>
-                Showing Comments {`${comments?.results?.length || 0}/${totalComments}`}
+                Showing Comments: {`${comments?.results?.length || 0} / ${totalComments}`}
             </h1>
 
             <div className="space-y-4">
                 {comments?.results?.map((comment, index) => (
-                    <div key={index} className="flex items-start gap-2">
-                        <HashLink className='flex gap-4 items-center' to={`/profile/${comment.username}#`}>
-                            <img src={comment.user_image || '/default-user.png'} alt="User" className="h-8 w-8 rounded-full" />
+                    <div key={index} className="flex items-start gap-3">
+                        {/* Avatar */}
+                        <HashLink to={`/profile/${comment.username}#`} className="shrink-0">
+                            <img
+                                src={comment.user_image || '/default-user.png'}
+                                alt="User"
+                                className="h-8 w-8 rounded-full"
+                            />
                         </HashLink>
-                        <div className='bg-gray-700 p-3 rounded-lg'>
-                            <p className="text-sm font-semibold text-yellow-500">{comment.username}</p>
-                            <p className="text-sm md:text-lg">{comment.content}</p>
+
+                        {/* Comment Box */}
+                        <div className="bg-gray-700 p-3 rounded-box flex flex-col w-fit">
+                            <div className="flex justify-between items-start gap-2">
+                                <p className="text-sm font-semibold text-yellow-500">
+                                    {comment.username}
+                                </p>
+                                <div className="dropdown dropdown-end">
+                                    <div tabIndex={0} role="button" className="cursor-pointer">
+                                        <MdMoreVert />
+                                    </div>
+                                    <ul tabIndex={0} className="menu dropdown-content bg-gray-900 rounded-box mt-3 w-32 text-md">
+                                        {
+                                            comment.username === user?.username &&
+                                            <>
+                                                <li>
+                                                    <div onClick={() => handleEdit(comment.id, comment.content)} >
+                                                        <MdEdit /> Edit
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div onClick={() => handleDelete(comment.id)} >
+                                                        <MdDeleteOutline /> Delete
+                                                    </div>
+                                                </li>
+                                            </>
+                                        }
+                                        <li>
+                                            <div onClick={() => handleShare(comment.id)} >
+                                                <PiShareFatLight /> Share
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div onClick={() => handleReport(comment.id)} >
+                                                <MdOutlineReport /> Report
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            {editingCommentId === comment.id ? (
+                                <div>
+                                    <textarea
+                                        className="bg-gray-800 w-full rounded-box p-2 text-sm text-white resize-none"
+                                        rows={2}
+                                        value={editingContent}
+                                        onChange={(e) => setEditingContent(e.target.value)}
+                                    />
+                                    <div className="flex gap-2 mt-1">
+                                        <CommonButton onClick={() => submitEdit(comment.id)}>Save</CommonButton>
+                                        <button onClick={() => setEditingCommentId(null)} className="btn btn-outline rounded-full hover:bg-red-600">
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </div>
+                            ) : (
+                                <p className="text-sm text-gray-100">{comment.content}</p>
+                            )}
                         </div>
                     </div>
                 ))}

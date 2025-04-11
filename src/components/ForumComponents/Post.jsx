@@ -48,7 +48,7 @@ const postTypeStyles = {
 const Post = ({ post }) => {
     const navigate = useNavigate();
 
-    const {user} = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
 
     const {
         id, title, lesson, post_type,
@@ -67,7 +67,7 @@ const Post = ({ post }) => {
 
         try {
             const voteRes = await handleVote(id);
-            
+
             if (voteRes.success === "Vote added!") {
                 toast.success("Vote added!");
                 setTotalVotes(totalVotes + 1);
@@ -90,7 +90,7 @@ const Post = ({ post }) => {
                     <img src={user_image || '/default-user.png'} alt={username} className='h-14 w-14 rounded-full' />
                     <div>
                         <div className='flex items-center gap-2'>
-                            <h4 className='text-lg font-bold'>{username}</h4>
+                            <h4 className='text-sm md:text-lg font-bold'>{username}</h4>
                             <div className="flex items-center gap-2 mb-2">
                                 {post_type && (
                                     <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold ${postTypeStyles[post_type]?.className}`}>
@@ -100,7 +100,7 @@ const Post = ({ post }) => {
                                 )}
                             </div>
                         </div>
-                        <p className='text-sm text-gray-300 flex items-center gap-1'>
+                        <p className='text-xs md:text-sm text-gray-300 flex items-center gap-1'>
                             {created_at.slice(0, 10)} • <BiWorld />
                         </p>
                     </div>

@@ -109,7 +109,7 @@ const Posts = () => {
                 </section>
 
                 {/* Posts Section */}
-                <section className="order-2 md:order-1">
+                <section className="order-2 lg:order-1">
                     <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 gradient-text">Posts</h2>
                     {posts.length === 0 ? (
                         <div className="text-center text-gray-300">No posts available.</div>
