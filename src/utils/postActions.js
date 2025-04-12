@@ -2,6 +2,17 @@ import toast from "react-hot-toast";
 import api from "../api/axiosInstance";
 
 
+// Create a post
+export const createPost = async (postData) => {
+    try {
+        const response = await api.post('/api/discussion/post/create/', postData);
+        return response.data;
+    } catch (err) {
+        console.error(err);
+        throw err;
+    }
+};
+
 // Toggle vote (upvote/downvote) on a discussion post
 export const handleVote = async (postId) => {
     try {
@@ -27,7 +38,7 @@ export const handleComment = async (postId, body) => {
 // Fetch all comments(paginated)
 export const fetchCommentList = async (postId) => {
     try {
-        const commentList = await api.get(`/api/discussion/comment/list/?post_id=${postId}&paginated=false`);
+        const commentList = await api.get(`/api/discussion/comment/list/?post_id=${postId}&paginated=true`);
         return commentList.data;
     }
     catch (err) {

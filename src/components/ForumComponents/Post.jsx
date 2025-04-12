@@ -2,20 +2,23 @@ import React, { useState, useContext } from 'react';
 import { BiWorld, BiUpvote } from "react-icons/bi";
 import { PiShareFatLight } from "react-icons/pi";
 import { FaRegCommentAlt } from "react-icons/fa";
-import { CiRead } from "react-icons/ci";
 import { handleVote, copyLink } from '../../utils/postActions';
 import { HashLink } from 'react-router-hash-link';
-import { useNavigate } from 'react-router-dom';
 import {
     MdOutlineStickyNote2,
     MdOutlineFeedback,
     MdEdit,
     MdOutlineCampaign,
-    MdOutlineSchool
+    MdOutlineSchool,
+    MdMoreVert,
+    MdOutlineReport,
+    MdDeleteOutline
 } from 'react-icons/md';
 import { LuFileQuestion } from "react-icons/lu";
 import toast from 'react-hot-toast';
 import { AuthContext } from '../../context/AuthContext';
+import api from '../../api/axiosInstance';
+import PostForm from './PostForm';
 
 
 const postTypeStyles = {
@@ -45,22 +48,38 @@ const postTypeStyles = {
     }
 };
 
-const Post = ({ post }) => {
-    const navigate = useNavigate();
-
+const Post = ({ post, fetchPosts }) => {
     const { user } = useContext(AuthContext);
+    const [postData, setPostData] = useState(null);
 
-    const {
-        id, title, lesson, post_type,
-        vote_count, comment_count,
-        created_at, username, user_image, views
-    } = post;
+    const [totalVotes, setTotalVotes] = useState(post?.vote_count);
 
-    const [totalVotes, setTotalVotes] = useState(vote_count);
+    const handleDelete = async () => {
+        try {
+            await api.delete(`/api/discussion/post/delete/${post.id}/`)
+            toast.success("Post deleted successfully");
+            fetchPosts();
+        }
+        catch {
+            toast.error("An error occurred");
+        }
+    }
 
-    const handleRedirect = () => {
-        navigate(`/forum/post/${id}`);
+    const handleEdit = async () => {
+        try {
+            const postRes = await api.get(`/api/discussion/post/details/${post.id}/`);
+            setPostData(postRes?.data);
+        } catch {
+            toast.error("An error occurred");
+            return;
+        }
+
+        document.getElementById('edit_post_modal').showModal();
     };
+
+    const handleReport = () => {
+        // IT WILL  implement later by me
+    }
 
     const toggleVote = async () => {
         if (!user) return toast.error("You must be logged in to vote.");
@@ -77,45 +96,75 @@ const Post = ({ post }) => {
             } else {
                 toast("Unknown response");
             }
-        } catch (err) {
-            console.error(err);
+        } catch {
             toast.error("An error occurred");
         }
     };
-
+    
     return (
         <div className='bg-gray-700 rounded-box shadow-md shadow-gray-900 flex flex-col h-full'>
             <div className='flex justify-between items-center p-3'>
-                <HashLink className='flex gap-4 items-center' to={`/profile/${username}#`}>
-                    <img src={user_image || '/default-user.png'} alt={username} className='h-14 w-14 rounded-full' />
+                <HashLink className='flex gap-4 items-center' to={`/profile/${post.username}#`}>
+                    <img src={post.user_image || '/default-user.png'} alt={post.username} className='h-14 w-14 rounded-full' />
                     <div>
                         <div className='flex items-center gap-2'>
-                            <h4 className='text-sm md:text-lg font-bold'>{username}</h4>
+                            <h4 className='text-sm md:text-lg font-bold'>{post.username}</h4>
                             <div className="flex items-center gap-2 mb-2">
-                                {post_type && (
-                                    <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold ${postTypeStyles[post_type]?.className}`}>
-                                        {postTypeStyles[post_type]?.icon}
-                                        {post_type.charAt(0).toUpperCase() + post_type.slice(1)}
+                                {post.post_type && (
+                                    <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold ${postTypeStyles[post.post_type]?.className}`}>
+                                        {postTypeStyles[post.post_type]?.icon}
+                                        {post.post_type.charAt(0).toUpperCase() + post.post_type.slice(1)}
                                     </span>
                                 )}
                             </div>
                         </div>
                         <p className='text-xs md:text-sm text-gray-300 flex items-center gap-1'>
-                            {created_at.slice(0, 10)} • <BiWorld />
+                            {post.created_at.slice(0, 10)} • <BiWorld />
                         </p>
                     </div>
                 </HashLink>
-                <p className='flex items-center gap-2 text-gray-300 tooltip tooltip-warning' data-tip='Total Reads'>
-                    <CiRead /> {views}
+                <p className='flex items-center gap-2 text-gray-300'>
+                    <div className="dropdown dropdown-end">
+                        <div tabIndex={0} role="button" className="cursor-pointer text-lg md:text-xl">
+                            <MdMoreVert />
+                        </div>
+                        <ul tabIndex={0} className="menu dropdown-content bg-gray-900 rounded-box mt-3 w-42 text-sm md:text-lg">
+                            {
+                                post.username === user?.username &&
+                                <>
+                                    <li>
+                                        <div onClick={handleEdit} >
+                                            <MdEdit /> Edit
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div onClick={handleDelete} >
+                                            <MdDeleteOutline /> Delete
+                                        </div>
+                                    </li>
+                                </>
+                            }
+                            <li>
+                                <div onClick={() => copyLink(`https://algoaspire-academy.vercel.app/forum/post/${post.id}`)} >
+                                    <PiShareFatLight /> Share
+                                </div>
+                            </li>
+                            <li>
+                                <div onClick={handleReport} >
+                                    <MdOutlineReport /> Report
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
                 </p>
             </div>
 
-            <div className="cursor-pointer hover:text-yellow-500 px-3" onClick={handleRedirect}>
-                <h1 className='text-2xl md:text-3xl font-bold'>{title}</h1>
-            </div>
+            <HashLink className="cursor-pointer hover:text-yellow-500 px-3" to={`/forum/post/${post.id}#`}>
+                <h1 className='text-2xl md:text-3xl font-bold'>{post.title}</h1>
+            </HashLink>
 
             <div className='px-3 text-gray-300 text-sm mt-5'>
-                <p>{totalVotes} Votes • {comment_count} Comments</p>
+                <p>{totalVotes} Votes • {post.comment_count} Comments</p>
             </div>
 
             <div className='flex justify-between items-center m-3 border-y border-black py-2 text-gray-300'>
@@ -125,19 +174,55 @@ const Post = ({ post }) => {
                 >
                     <BiUpvote /> {totalVotes} Votes
                 </button>
+                <HashLink to={`/forum/post/${post.id}#`}>
+                    <button
+                        className='flex-1 flex justify-center items-center btn btn-outline border-none text-sm md:text-lg px-2 py-1'
+                    >
+                        <FaRegCommentAlt /> {post.comment_count} Comment
+                    </button>
+                </HashLink>
                 <button
                     className='flex-1 flex justify-center items-center btn btn-outline border-none text-sm md:text-lg px-2 py-1'
-                    onClick={handleRedirect}
-                >
-                    <FaRegCommentAlt /> {comment_count} Comment
-                </button>
-                <button
-                    className='flex-1 flex justify-center items-center btn btn-outline border-none text-sm md:text-lg px-2 py-1'
-                    onClick={() => copyLink(`https://algoaspire-academy.vercel.app/forum/post/${id}`)}
+                    onClick={() => copyLink(`https://algoaspire-academy.vercel.app/forum/post/${post.id}`)}
                 >
                     <PiShareFatLight /> Share
                 </button>
             </div>
+
+            {/* edit modal  */}
+            <dialog id="edit_post_modal" className="modal modal-bottom sm:modal-middle">
+                <div className="modal-box max-w-xl p-6 rounded-box shadow-lg space-y-4">
+                    <form method="dialog" className="flex justify-end">
+                        <button className='btn rounded-full'>✕</button>
+                    </form>
+                    <h3 className="text-2xl font-bold text-center gradient-text">Edit Post</h3>
+
+                    {postData ? (
+                        <PostForm
+                            key={postData.id} 
+                            initialData={{
+                                title: postData.title,
+                                body: postData.body,
+                                post_type: postData.post_type,
+                                access_type: postData.access,
+                                tags: postData.tags || []
+                            }}
+                            onSubmitCallback={async (updatedPostData) => {
+                                try {
+                                    await api.put(`/api/discussion/post/edit/${post.id}/`, updatedPostData);
+                                    toast.success("Post updated successfully!");
+                                    fetchPosts();  // Refresh posts list after update
+                                    document.getElementById('edit_post_modal').close();
+                                } catch {
+                                    toast.error("Failed to update post.");
+                                }
+                            }}
+                        />
+                    ) : (
+                        <p>Loading...</p>
+                    )}
+                </div>
+            </dialog>
         </div>
     );
 };

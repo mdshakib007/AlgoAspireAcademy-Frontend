@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Header from './Header';
 import api from '../../api/axiosInstance'
 import toast from 'react-hot-toast';
@@ -7,7 +7,8 @@ import AnnouncementCard from '../CourseComponents/AnnouncementCard';
 import CommonButton from '../Common/CommonButton';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import { FaMagnifyingGlass } from "react-icons/fa6";
-import { scrollToTop } from '../../utils/scrollToTop';
+import { FaPenToSquare } from "react-icons/fa6";
+import PostForm from './PostForm';
 
 
 const Posts = () => {
@@ -18,14 +19,14 @@ const Posts = () => {
     const [totalPostCount, setTotalPostCount] = useState(0);
     const [searchTitle, setSearchTitle] = useState('');
     const [shouldScroll, setShouldScroll] = useState(false);
-
+    const postModalRef = useRef(null);
 
     const fetchPosts = async (url = `/api/discussion/post/list/`, postType = '', title = '') => {
         try {
             const response = await api.get(url, {
                 params: {
                     post_type: postType || undefined,
-                    access_type: 'Public',
+                    access_type: 'public',
                     paginated: true,
                     title: title || undefined,
                 },
@@ -34,9 +35,13 @@ const Posts = () => {
             setNextPage(response.data.next);
             setPreviousPage(response.data.previous);
             setTotalPostCount(response.data.count);
-        } catch (error) {
+        } catch {
             toast.error('Failed to fetch posts');
         }
+    };
+
+    const openAddPostModal = () => {
+        postModalRef.current?.showModal();
     };
 
     const handleSearch = (e) => {
@@ -110,13 +115,18 @@ const Posts = () => {
 
                 {/* Posts Section */}
                 <section className="order-2 lg:order-1">
-                    <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 gradient-text">Posts</h2>
+                    <div className="flex justify-between items-center mb-4">
+                        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold gradient-text">Posts</h2>
+                        <CommonButton onClick={openAddPostModal}>
+                            <FaPenToSquare /> Add Post
+                        </CommonButton>
+                    </div>
                     {posts.length === 0 ? (
                         <div className="text-center text-gray-300">No posts available.</div>
                     ) : (
                         <div className="space-y-4">
                             {posts.map((post) => (
-                                <Post key={post.id} post={post} />
+                                <Post key={post.id} post={post} fetchPosts={fetchPosts} />
                             ))}
                         </div>
                     )}
@@ -133,6 +143,18 @@ const Posts = () => {
                     </div>
                 </section>
             </div>
+
+            {/* add post modal  */}
+            <dialog ref={postModalRef} id="add_post_modal" className="modal modal-bottom sm:modal-middle">
+                <div className="modal-box max-w-xl p-6 rounded-box shadow-lg space-y-4">
+                    <form method="dialog" className="flex justify-end">
+                        <button className='btn rounded-full'>✕</button>
+                    </form>
+                    <h3 className="text-2xl font-bold text-center gradient-text">Create Post</h3>
+
+                    <PostForm />
+                </div>
+            </dialog>
         </div>
     );
 };

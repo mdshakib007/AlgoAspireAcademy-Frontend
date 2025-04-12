@@ -17,7 +17,7 @@ const CommonButton = ({
         bg-gradient-to-r from-yellow-500 to-yellow-600 
         hover:from-yellow-600 hover:to-yellow-700
         transition-all duration-300 ease-in-out
-        px-5 py-1.5 rounded-full shadow-md cursor-pointer
+        px-5 py-2 rounded-full shadow-md cursor-pointer
         disabled:opacity-50 disabled:cursor-not-allowed
         ${className}
       `}
