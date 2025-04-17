@@ -18,7 +18,7 @@ import { LuFileQuestion } from "react-icons/lu";
 import toast from 'react-hot-toast';
 import { AuthContext } from '../../context/AuthContext';
 import api from '../../api/axiosInstance';
-import PostForm from './PostForm';
+import { useNavigate } from 'react-router-dom';
 
 
 const postTypeStyles = {
@@ -50,9 +50,8 @@ const postTypeStyles = {
 
 const Post = ({ post, fetchPosts }) => {
     const { user } = useContext(AuthContext);
-    const [postData, setPostData] = useState(null);
-
     const [totalVotes, setTotalVotes] = useState(post?.vote_count);
+    const navigate = useNavigate();
 
     const handleDelete = async () => {
         try {
@@ -65,16 +64,12 @@ const Post = ({ post, fetchPosts }) => {
         }
     }
 
-    const handleEdit = async () => {
-        try {
-            const postRes = await api.get(`/api/discussion/post/details/${post.id}/`);
-            setPostData(postRes?.data);
-        } catch {
-            toast.error("An error occurred");
-            return;
-        }
-
-        document.getElementById('edit_post_modal').showModal();
+    const handleEdit = () => {
+        navigate('/forum/edit-post', {
+            state: {
+                postId: post.id
+            }
+        });
     };
 
     const handleReport = () => {
@@ -85,7 +80,7 @@ const Post = ({ post, fetchPosts }) => {
         if (!user) return toast.error("You must be logged in to vote.");
 
         try {
-            const voteRes = await handleVote(id);
+            const voteRes = await handleVote(post.id);
 
             if (voteRes.success === "Vote added!") {
                 toast.success("Vote added!");
@@ -100,7 +95,7 @@ const Post = ({ post, fetchPosts }) => {
             toast.error("An error occurred");
         }
     };
-    
+
     return (
         <div className='bg-gray-700 rounded-box shadow-md shadow-gray-900 flex flex-col h-full'>
             <div className='flex justify-between items-center p-3'>
@@ -123,7 +118,7 @@ const Post = ({ post, fetchPosts }) => {
                         </p>
                     </div>
                 </HashLink>
-                <p className='flex items-center gap-2 text-gray-300'>
+                <div className='flex items-center gap-2 text-gray-300'>
                     <div className="dropdown dropdown-end">
                         <div tabIndex={0} role="button" className="cursor-pointer text-lg md:text-xl">
                             <MdMoreVert />
@@ -156,7 +151,7 @@ const Post = ({ post, fetchPosts }) => {
                             </li>
                         </ul>
                     </div>
-                </p>
+                </div>
             </div>
 
             <HashLink className="cursor-pointer hover:text-yellow-500 px-3" to={`/forum/post/${post.id}#`}>
@@ -188,41 +183,6 @@ const Post = ({ post, fetchPosts }) => {
                     <PiShareFatLight /> Share
                 </button>
             </div>
-
-            {/* edit modal  */}
-            <dialog id="edit_post_modal" className="modal modal-bottom sm:modal-middle">
-                <div className="modal-box max-w-xl p-6 rounded-box shadow-lg space-y-4">
-                    <form method="dialog" className="flex justify-end">
-                        <button className='btn rounded-full'>✕</button>
-                    </form>
-                    <h3 className="text-2xl font-bold text-center gradient-text">Edit Post</h3>
-
-                    {postData ? (
-                        <PostForm
-                            key={postData.id} 
-                            initialData={{
-                                title: postData.title,
-                                body: postData.body,
-                                post_type: postData.post_type,
-                                access_type: postData.access,
-                                tags: postData.tags || []
-                            }}
-                            onSubmitCallback={async (updatedPostData) => {
-                                try {
-                                    await api.put(`/api/discussion/post/edit/${post.id}/`, updatedPostData);
-                                    toast.success("Post updated successfully!");
-                                    fetchPosts();  // Refresh posts list after update
-                                    document.getElementById('edit_post_modal').close();
-                                } catch {
-                                    toast.error("Failed to update post.");
-                                }
-                            }}
-                        />
-                    ) : (
-                        <p>Loading...</p>
-                    )}
-                </div>
-            </dialog>
         </div>
     );
 };

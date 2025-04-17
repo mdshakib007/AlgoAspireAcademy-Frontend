@@ -21,6 +21,8 @@ import Credit from "../pages/Credit";
 import Rules from "../pages/Rules";
 import Forum from "../pages/Forum";
 import PostDetails from "../components/ForumComponents/PostDetails";
+import CreatePost from "../components/ForumComponents/CreatePost";
+import EditPost from "../components/ForumComponents/EditPost";
 
 
 const AppRouter = () => {
@@ -69,6 +71,8 @@ const AppRouter = () => {
                         <Route index path="/dashboard" element={<Dashboard />} />
                         <Route index path="/forum" element={<Forum />} />
                         <Route index path="/forum/post/:postId" element={<PostDetails />} />
+                        <Route index path="/forum/create-post/" element={<CreatePost />} />
+                        <Route index path="/forum/edit-post/" element={<EditPost />} />
                         <Route index path="/privacy" element={<PrivacyPolicy />} />
                         <Route index path="/terms" element={<Terms />} />
                         <Route index path="/contact" element={<Contact />} />

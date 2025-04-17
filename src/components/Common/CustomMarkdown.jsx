@@ -85,6 +85,12 @@ const CustomMarkdown = ({ children, className }) => {
                         h4: ({ node, ...props }) => (
                             <h4 className="text-base md:text-lg font-medium my-3" {...props} />
                         ),
+                        h5: ({ node, ...props }) => (
+                            <h5 className="text-base md:text-sm font-medium my-3" {...props} />
+                        ),
+                        h6: ({ node, ...props }) => (
+                            <h5 className="text-base md:text-xs font-medium my-3" {...props} />
+                        ),
 
                         // Paragraphs
                         p: ({ node, ...props }) => (
