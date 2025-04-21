@@ -5,13 +5,14 @@ import {
     MdOutlineFeedback,
     MdEdit,
     MdOutlineCampaign,
-    MdOutlineSchool
+    MdOutlineSchool,
+    MdCheck
 } from 'react-icons/md';
 import { LuFileQuestion } from "react-icons/lu";
 
 
 const postTypes = [
-    { value: '', label: 'All' },
+    { value: '', label: 'All', icon: <MdCheck size={20} />},
     { value: 'note', label: 'Note', icon: <MdOutlineStickyNote2 size={20} /> },
     { value: 'question', label: 'Question', icon: <LuFileQuestion size={20} /> },
     { value: 'feedback', label: 'Feedback', icon: <MdOutlineFeedback size={20} /> },

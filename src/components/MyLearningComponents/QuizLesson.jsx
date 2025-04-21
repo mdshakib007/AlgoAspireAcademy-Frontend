@@ -36,16 +36,25 @@ const QuizLesson = ({ lesson }) => {
     if (!quiz) return <div>No quiz available.</div>;
 
     return (
-        <div className="p-4 md:p-6 rounded-xl text-white space-y-6">
-            <div>
-                <h2 className="text-2xl font-bold text-yellow-500">{lesson.title}</h2>
-                <p className="text-sm text-gray-300 mt-1">{lesson.summary}</p>
-                <h3 className="mt-4 text-lg font-semibold">{quiz.title}</h3>
+        <div className="p-2 md:p-6 rounded-xl text-white space-y-6">
+            <div className='flex justify-between gap-3 border-b-5 border-gray-700 gradient-text'>
+                <h2 className="md:text-xl font-bold">{lesson.title}</h2>
+                <p className='text-xs md:text-sm'>Updated: {new Date(lesson.updated_at).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                })}</p>
+            </div>
+            <div className='border-yellow-500 border-l-5 px-2'>
+                <h1 className=' md:text-lg text-yellow-500 font-bold'>Lesson Summary</h1>
+                <p className='text-sm text-gray-300'>{lesson?.summary || 'No Summary Available'}</p>
             </div>
 
+            <h3 className="mt-4 text-lg font-bold">Quiz: {quiz?.title}</h3>
+
             <div className="space-y-4">
-                <h4 className="font-medium text-base">
-                    Q{currentIndex + 1}: {currentQuestion.title}
+                <h4 className="font-bold text-base text-yellow-500 border-yellow-500 border-l-5 px-2">
+                    Q{currentIndex + 1}: {currentQuestion?.title}
                 </h4>
                 <div className="grid gap-3">
                     {['A', 'B', 'C', 'D'].map((opt) => {

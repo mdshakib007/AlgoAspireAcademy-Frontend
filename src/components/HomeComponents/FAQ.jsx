@@ -5,7 +5,7 @@ const FAQ = ({ faq }) => {
 
     return (
         <div className="collapse collapse-arrow bg-gray-700 border border-gray-900 mt-2">
-            <input type="radio" name={`faq-accordion`} />
+            <input type="checkbox" name={`faq-accordion`} />
             <div className="collapse-title font-semibold text-xl gradient-text">{question}</div>
             <div className="collapse-content text-lg text-gray-300">{answer}</div>
         </div>

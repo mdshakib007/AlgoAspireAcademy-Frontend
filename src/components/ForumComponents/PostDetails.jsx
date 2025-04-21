@@ -19,7 +19,6 @@ import CustomMarkdown from '../Common/CustomMarkdown';
 import { AuthContext } from '../../context/AuthContext';
 
 
-
 const postTypeStyles = {
     note: { icon: <MdOutlineStickyNote2 size={16} />, className: 'bg-blue-500 text-white' },
     question: { icon: <LuFileQuestion size={16} />, className: 'bg-purple-500 text-white' },
@@ -29,9 +28,10 @@ const postTypeStyles = {
     tutorial: { icon: <MdOutlineSchool size={16} />, className: 'bg-yellow-500 text-black' }
 };
 
-const PostDetails = () => {
+const PostDetails = ({ postId: propPostId }) => {
     const { user } = useContext(AuthContext);
-    const { postId } = useParams();
+    const { postId: paramPostId } = useParams();
+    const postId = propPostId || paramPostId;
 
     const [post, setPost] = useState(null);
     const [comments, setComments] = useState([]);
@@ -80,7 +80,7 @@ const PostDetails = () => {
                 count: prevComments.count + 1,
                 results: [response, ...prevComments.results]
             }));
-            setTotalComments(totalComments+1);
+            setTotalComments(totalComments + 1);
             setCommentInput('');
             toast.success("Comment added!");
         } catch {
@@ -154,7 +154,7 @@ const PostDetails = () => {
                 const newResults = prevComments.results.filter(
                     (comment) => comment.id !== commentId
                 );
-                setTotalComments(totalComments-1);
+                setTotalComments(totalComments - 1);
                 return {
                     ...prevComments,
                     count: prevComments.count - 1,

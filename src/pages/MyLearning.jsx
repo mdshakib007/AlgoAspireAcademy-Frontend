@@ -9,7 +9,7 @@ import TextLesson from '../components/MyLearningComponents/TextLesson';
 import VideoLesson from '../components/MyLearningComponents/VideoLesson';
 import AssignmentLesson from '../components/MyLearningComponents/AssignmentLesson';
 import QuizLesson from '../components/MyLearningComponents/QuizLesson';
-
+import Notes from '../components/MyLearningComponents/Notes';
 
 // Function to return the icon based on the lecture type.
 const getIcon = (type) => {
@@ -48,13 +48,12 @@ const MyLearning = () => {
     }, [id]);
 
     const fetchLessonDetails = async (lesson) => {
-        setCurrentLesson(lesson)
-        try{
+        setCurrentLesson(lesson);
+        try {
             const res = await api.get(`/api/course/lesson/details/${lesson.id}/`);
             setCurrentLesson(res.data);
-        }
-        catch(err){
-            toast.error("An error occurred");
+        } catch {
+            toast.error('An error occurred');
         }
     };
 
@@ -88,37 +87,54 @@ const MyLearning = () => {
 
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         {/* Right Side: Lesson Content (show first on mobile) */}
-                        <main className="order-1 lg:order-2 bg-base-100 rounded-lg shadow p-4 min-h-[300px] lg:col-span-2">
+                        <main className="order-1 lg:order-2 bg-base-100 rounded-box shadow min-h-[300px] lg:col-span-2 p-2 md:p-5">
                             {renderLessonContent()}
+
+                            {
+                                (currentLesson.lecture_type === 'Text' || currentLesson.lecture_type === 'Video') && <div className='text-green-400 p-5 border-2 border-gray-700 rounded-box bg-gray-900 flex justify-between gap-3'>
+                                    <label htmlFor="completed" className='font-bold cursor-pointer'>Lesson Completed?</label>
+                                    <input type="checkbox" name="completed" id="completed" className='checkbox checkbox-success' />
+                                </div>
+                            }
+
+                            {/* Notes section  */}
+                            <Notes lesson={currentLesson} />
                         </main>
 
-                        {/* Left Side: Lessons (show second on mobile, first on large screens) */}
+                        {/* Left Side: Lessons Accordion */}
                         <aside className="order-2 lg:order-1 bg-base-200 rounded-lg shadow p-4">
                             <h2 className="text-xl font-bold mb-4">Lessons</h2>
                             <div className="space-y-4">
                                 {course.modules.map((module, idx) => (
-                                    <div key={module.id}>
-                                        <h3 className="font-semibold text-yellow-500">
+                                    <div key={module.id} className="collapse collapse-arrow bg-base-100 rounded-box">
+                                        <input type="checkbox" defaultChecked={module.lessons.some(lesson => lesson.id === currentLesson?.id)} />
+                                        <div className="collapse-title text-lg font-bold">
                                             {idx + 1}. {module.title}
-                                        </h3>
-                                        <ul className="pl-2 mt-1 space-y-2">
-                                            {module.lessons.map((lesson) => (
-                                                <li
-                                                    key={lesson.id}
-                                                    onClick={() => fetchLessonDetails(lesson)}
-                                                    className={`flex items-center gap-2 cursor-pointer px-2 py-1 rounded-md transition hover:bg-gray-500 ${currentLesson?.id === lesson.id ? 'bg-gray-500' : ''
-                                                        }`}
-                                                >
-                                                    {getIcon(lesson.lecture_type)}
-                                                    <span className="text-sm">{lesson.title}</span>
-                                                    {!lesson.is_published && (
-                                                        <span className="badge badge-warning text-xs">
-                                                            Unpublished
-                                                        </span>
-                                                    )}
-                                                </li>
-                                            ))}
-                                        </ul>
+                                        </div>
+                                        <div className="collapse-content p-0">
+                                            {module.lessons.length === 0 ? (
+                                                <p className="text-gray-400 italic px-4 py-2">No lessons added.</p>
+                                            ) : (
+                                                <ul className="pl-4 space-y-2 py-2">
+                                                    {module.lessons.map((lesson) => (
+                                                        <li
+                                                            key={lesson.id}
+                                                            onClick={() => fetchLessonDetails(lesson)}
+                                                            className={`flex items-center gap-2 cursor-pointer px-2 py-1 rounded-md transition hover:bg-gray-500 ${currentLesson?.id === lesson.id ? 'bg-gray-500 text-yellow-500' : ''
+                                                                }`}
+                                                        >
+                                                            {getIcon(lesson.lecture_type)}
+                                                            <span className="text-sm font-bold">{lesson.title}</span>
+                                                            {!lesson.is_published && (
+                                                                <span className="badge badge-warning text-xs">
+                                                                    Unpublished
+                                                                </span>
+                                                            )}
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            )}
+                                        </div>
                                     </div>
                                 ))}
                             </div>
