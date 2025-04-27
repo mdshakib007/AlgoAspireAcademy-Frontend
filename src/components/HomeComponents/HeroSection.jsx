@@ -33,7 +33,7 @@ const HeroSection = () => {
             {/* Right - Image */}
             <div className="w-full md:w-1/2 flex justify-center">
                 <img
-                    src="/learning-sketch.svg"
+                    src="/learning2.svg"
                     alt="Hero"
                     className="w-64 md:w-80 lg:w-[28rem] h-auto object-contain"
                 />

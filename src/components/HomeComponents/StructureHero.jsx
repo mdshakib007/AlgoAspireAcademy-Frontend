@@ -1,4 +1,4 @@
-import { FaExternalLinkAlt } from 'react-icons/fa';
+import { FaCheck, FaExternalLinkAlt } from 'react-icons/fa';
 import CommonButton from '../Common/CommonButton';
 import { HashLink } from 'react-router-hash-link';
 
@@ -29,13 +29,32 @@ const StructureHero = () => {
             </div>
 
             {/* Right - Image */}
-            <div className="w-full md:w-1/2 flex justify-center">
-                <img
-                    src="/structure.svg"
-                    alt="Course Structure"
-                    className="w-64 md:w-80 lg:w-[28rem] h-auto object-contain"
-                />
+            <div className="w-full md:w-1/2 flex md:justify-center">
+                <ul className="timeline timeline-vertical">
+                    {[
+                        "Enroll a course",
+                        "Go to `Start Learning`",
+                        "Complete a lesson",
+                        "Finish a module",
+                        "Complete the course!",
+                        "Go to `Step 1`"
+                    ].map((step, index) => (
+                        <li key={index} className="group mb-5 cursor-context-menu">
+                            <div className="timeline-start font-bold text-gray-300">
+                                Step {index + 1}
+                            </div>
+                            <div className="timeline-middle bg-gray-500 p-1 rounded-full transition-transform duration-500 group-hover:scale-110 group-hover:bg-yellow-500">
+                                <FaCheck className="text-black" />
+                            </div>
+                            <div className="timeline-end timeline-box bg-gray-800 border border-gray-600 text-gray-200 text-sm font-semibold shadow-md transition-all duration-300 group-hover:bg-yellow-500 group-hover:text-black">
+                                {step}
+                            </div>
+                            {index !== 4 && <hr className="border-gray-600 transition-colors duration-500 group-hover:border-yellow-500" />}
+                        </li>
+                    ))}
+                </ul>
             </div>
+
         </section>
     );
 };
