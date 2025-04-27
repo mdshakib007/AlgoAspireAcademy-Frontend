@@ -6,7 +6,8 @@ import { useLessonCompletion } from '../../hooks/useLessonCompletion';
 import toast from 'react-hot-toast';
 
 
-const QuizLesson = ({ lesson, enrollmentId, isCompleted }) => {
+const QuizLesson = ({ lesson, enrollmentId, lessonCompletion }) => {
+    const isCompleted = lessonCompletion ? true : false;
     const quiz = lesson.quiz;
     const questions = quiz?.questions || [];
 

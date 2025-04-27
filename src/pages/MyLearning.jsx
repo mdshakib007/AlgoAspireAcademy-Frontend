@@ -12,6 +12,7 @@ import QuizLesson from '../components/MyLearningComponents/QuizLesson';
 import Notes from '../components/MyLearningComponents/Notes';
 import { AuthContext } from '../context/AuthContext';
 import { useLessonCompletion } from '../hooks/useLessonCompletion';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 
 // A reusable checkbox component for marking lesson as completed
@@ -60,11 +61,16 @@ const MyLearning = () => {
     const [currentLesson, setCurrentLesson] = useState(null);
     const [enrollmentData, setEnrollmentData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [showNotes, setShowNotes] = useState(false);
 
     const [id] = idAndSlug ? idAndSlug.split('-') : [];
 
     const isLessonCompleted = (lessonId) => {
         return enrollmentData?.lesson_completions?.some(lc => lc.lesson === lessonId);
+    };
+
+    const findLessonCompletion = (lessonId) => {
+        return enrollmentData?.lesson_completions?.find(lc => lc.lesson === lessonId);
     };
 
     useEffect(() => {
@@ -114,13 +120,13 @@ const MyLearning = () => {
             case 'Video': return <VideoLesson lesson={currentLesson} />;
             case 'Assignment': return <AssignmentLesson
                 enrollmentId={enrollmentData?.id}
-                isCompleted={isLessonCompleted(currentLesson?.is)}
+                lessonCompletion={findLessonCompletion(currentLesson?.id)}
                 lesson={currentLesson}
             />;
             case 'Quiz': return <QuizLesson
                 lesson={currentLesson}
                 enrollmentId={enrollmentData?.id}
-                isCompleted={isLessonCompleted(currentLesson?.id)}
+                lessonCompletion={findLessonCompletion(currentLesson?.id)}
             />;
             default: return <p className="text-red-500">Unsupported lesson type.</p>;
         }
@@ -147,7 +153,7 @@ const MyLearning = () => {
                         <main className="order-1 lg:order-2 bg-base-100 rounded-box shadow min-h-[300px] lg:col-span-2 p-2 md:p-5">
                             {renderLessonContent()}
 
-                            {(currentLesson.lecture_type === 'Text' || currentLesson.lecture_type === 'Video') && (
+                            {(currentLesson?.lecture_type === 'Text' || currentLesson?.lecture_type === 'Video') && (
                                 <LessonCompletionCheckbox
                                     enrollmentId={enrollmentData?.id}
                                     lessonId={currentLesson?.id}
@@ -155,13 +161,33 @@ const MyLearning = () => {
                                 />
                             )}
 
-                            {(currentLesson.lecture_type === 'Text' || currentLesson.lecture_type === 'Video') ? (
-                                <Notes lesson={currentLesson} />
-                            ) : (
-                                <div className='flex justify-center items-center gap-2 font-bold text-2xl mt-10 text-gray-500'>
-                                    <MdDoDisturb /> Notes not allowed for this lecture.
-                                </div>
-                            )}
+                            <div
+                                className={`mt-10 w-fit p-2 rounded-box cursor-pointer font-bold ${showNotes ? 'bg-red-500 text-black' : 'bg-green-500'}`}
+                                onClick={() => setShowNotes(!showNotes)}
+                            >
+                                {
+                                    showNotes ? (
+                                        <span className="flex items-center gap-2">
+                                            Hide Note Option <FaEyeSlash className="inline" />
+                                        </span>
+                                    ) : (
+                                        <span className="flex items-center gap-2">
+                                            Show Note Option <FaEye className="inline" />
+                                        </span>
+                                    )
+                                }
+                            </div>
+
+                            {
+                                showNotes && ((currentLesson.lecture_type === 'Text' || currentLesson.lecture_type === 'Video') ? (
+                                    <Notes lesson={currentLesson} />
+                                ) : (
+                                    <div className='flex justify-center items-center gap-2 font-bold text-2xl mt-10 text-gray-500'>
+                                        <MdDoDisturb /> Notes not allowed for this lecture.
+                                    </div>
+                                ))
+                            }
+
                         </main>
 
                         {/* Sidebar lesson list */}
