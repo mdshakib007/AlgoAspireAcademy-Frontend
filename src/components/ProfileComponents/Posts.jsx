@@ -13,7 +13,7 @@ const Posts = ({ user, currentUser }) => {
     const [totalPostCount, setTotalPostCount] = useState(0);
     const [shouldScroll, setShouldScroll] = useState(false);
 
-    const access = user.username === currentUser.username ? undefined : 'public';
+    const access = user?.username === currentUser?.username ? undefined : 'public';
 
     const fetchPosts = async (url = `/api/discussion/post/list/`, postType = '', title = '') => {
         try {
@@ -23,7 +23,7 @@ const Posts = ({ user, currentUser }) => {
                     access_type: access,
                     paginated: true,
                     title: title || undefined,
-                    user_id: currentUser.id,
+                    user_id: currentUser?.id,
                 },
             });
             setPosts(response.data.results);

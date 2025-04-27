@@ -23,6 +23,9 @@ import Forum from "../pages/Forum";
 import PostDetails from "../components/ForumComponents/PostDetails";
 import CreatePost from "../components/ForumComponents/CreatePost";
 import EditPost from "../components/ForumComponents/EditPost";
+import MyBookmarks from "../pages/MyBookmarks";
+import MyActivity from "../pages/MyActivity";
+import Leaderboard from "../pages/Leaderboard";
 
 
 const AppRouter = () => {
@@ -73,6 +76,9 @@ const AppRouter = () => {
                         <Route index path="/forum/post/:postId" element={<PostDetails />} />
                         <Route index path="/forum/create-post/" element={<CreatePost />} />
                         <Route index path="/forum/edit-post/" element={<EditPost />} />
+                        <Route index path="/bookmarks" element={<MyBookmarks />} />
+                        <Route index path="/activity" element={<MyActivity />} />
+                        <Route index path="/leaderboard" element={<Leaderboard />} />
                         <Route index path="/privacy" element={<PrivacyPolicy />} />
                         <Route index path="/terms" element={<Terms />} />
                         <Route index path="/contact" element={<Contact />} />

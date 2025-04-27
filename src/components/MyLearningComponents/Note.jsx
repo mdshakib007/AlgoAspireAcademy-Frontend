@@ -1,6 +1,7 @@
 import React from 'react';
 import { BiWorld } from "react-icons/bi";
 import { HashLink } from 'react-router-hash-link';
+import { FaLock } from "react-icons/fa";
 import { formatDate } from '../../utils/postActions';
 
 
@@ -14,13 +15,13 @@ const Note = ({ note, showNote }) => {
                     <div>
                         <h4 className='text-sm md:text-lg font-bold'>{note.username}</h4>
                         <p className='text-xs md:text-sm text-gray-300 flex items-center gap-1'>
-                            {formatDate(note.created_at)} • <BiWorld />
+                            {formatDate(note.created_at)} • {note.access === 'public' ? <BiWorld /> : <FaLock />}
                         </p>
                     </div>
                 </HashLink>
             </div>
 
-            <div onClick={()=>showNote(note.id)}>
+            <div onClick={() => showNote(note.id)}>
                 <h1 className='cursor-pointer hover:text-yellow-500 py-3 text-xl md:text-2xl font-bold'>{note.title}</h1>
             </div>
 
