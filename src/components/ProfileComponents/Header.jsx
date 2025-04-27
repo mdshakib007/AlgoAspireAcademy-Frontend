@@ -15,6 +15,7 @@ import About from './About';
 import Achievements from './Achievements';
 import Summary from './Summary';
 import api from '../../api/axiosInstance';
+import Posts from './Posts';
 
 
 const Header = ({ username }) => {
@@ -23,7 +24,7 @@ const Header = ({ username }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const token = sessionStorage.getItem("access_token"); // or localStorage if you store it there
+        const token = sessionStorage.getItem("access_token");
 
         // Case: User is logged out
         if (!token) {
@@ -158,13 +159,7 @@ const Header = ({ username }) => {
             </div>
 
             {/* my posts */}
-            <div className='my-10'>
-                <h3 className='text-center text-2xl md:text-4xl font-bold'>Recent Posts</h3>
-                <div className='flex justify-between'>
-                    <CommonButton><FaArrowLeft />Previous</CommonButton>
-                    <CommonButton>Next<FaArrowRight /></CommonButton>
-                </div>
-            </div>
+            <Posts user={user} currentUser={currentUser}/>
         </section>
     );
 };

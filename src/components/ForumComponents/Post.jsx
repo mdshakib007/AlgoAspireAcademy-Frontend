@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { BiWorld, BiUpvote } from "react-icons/bi";
 import { PiShareFatLight } from "react-icons/pi";
-import { FaRegCommentAlt } from "react-icons/fa";
+import { FaRegCommentAlt, FaLock } from "react-icons/fa";
 import { handleVote, copyLink } from '../../utils/postActions';
 import { HashLink } from 'react-router-hash-link';
 import {
@@ -98,7 +98,7 @@ const Post = ({ post, fetchPosts }) => {
     };
 
     return (
-        <div className='bg-gray-700 rounded-box shadow-md shadow-gray-900 flex flex-col h-full'>
+        <div className='bg-gray-700 rounded-box max-w-3xl w-full shadow-md shadow-gray-900 flex flex-col h-full'>
             <div className='flex justify-between items-center p-3'>
                 <HashLink className='flex gap-4 items-center' to={`/profile/${post.username}#`}>
                     <img src={post.user_image || '/default-user.png'} alt={post.username} className='h-14 w-14 rounded-full' />
@@ -115,7 +115,7 @@ const Post = ({ post, fetchPosts }) => {
                             </div>
                         </div>
                         <p className='text-xs md:text-sm text-gray-300 flex items-center gap-1'>
-                            {formatDate(post.created_at)} • <BiWorld />
+                            {formatDate(post.created_at)} • {post.access === 'public' ? <BiWorld /> : <FaLock />}
                         </p>
                     </div>
                 </HashLink>
@@ -170,10 +170,11 @@ const Post = ({ post, fetchPosts }) => {
                 >
                     <BiUpvote /> {totalVotes} Votes
                 </button>
-                <HashLink to={`/forum/post/${post.id}#`}>
-                    <button
-                        className='flex-1 flex justify-center items-center btn btn-outline border-none text-sm md:text-lg px-2 py-1'
-                    >
+                <HashLink
+                    to={`/forum/post/${post.id}#`}
+                    className='flex-1 flex justify-center items-center btn btn-outline border-none text-sm md:text-lg px-2 py-1'
+                >
+                    <button className='flex items-center gap-2'>
                         <FaRegCommentAlt /> {post.comment_count} Comment
                     </button>
                 </HashLink>

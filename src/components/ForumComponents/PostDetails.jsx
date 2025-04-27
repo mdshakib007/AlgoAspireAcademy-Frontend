@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import { BiWorld, BiUpvote } from "react-icons/bi";
-import { FaRegCommentAlt, FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { FaRegCommentAlt, FaArrowLeft, FaArrowRight, FaLock } from "react-icons/fa";
 import { PiShareFatLight } from "react-icons/pi";
 import { CiRead } from "react-icons/ci";
 import {
@@ -196,7 +196,7 @@ const PostDetails = ({ postId: propPostId }) => {
                         <div>
                             <h4 className='font-bold text-sm md:text-lg'>{username}</h4>
                             <p className='text-xs md:text-sm text-gray-400 flex items-center gap-2'>
-                                {formatDateTime(created_at)} • <BiWorld />
+                                {formatDateTime(created_at)} • {post.access === 'public' ? <BiWorld /> : <FaLock />}
                             </p>
                         </div>
                     </div>
