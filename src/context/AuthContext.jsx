@@ -8,17 +8,18 @@ export const AuthProvider = ({ children }) => {
     const [visitUser, setVisitUser] = useState(null);
 
     const fetchMe = useCallback(async () => {
-        if (!sessionStorage.getItem("access_token")) {
-            setUser(null); 
+        if (!localStorage.getItem("access_token")) {
+            setUser(null);
             return null;
         }
 
         try {
             const userRes = await api.get('/api/account/me/');
             setUser(userRes.data);
+            localStorage.setItem("user_id", userRes.data.id);
         } catch (error) {
             console.error("Failed to fetch user", error);
-            sessionStorage.removeItem("access_token");
+            localStorage.removeItem("access_token");
         }
     }, []);
 
@@ -32,9 +33,9 @@ export const AuthProvider = ({ children }) => {
         }
     }, []);
 
-    // Get user from sessionStorage if the access token exists
+    // Get user from localStorage if the access token exists
     useEffect(() => {
-        const token = sessionStorage.getItem("access_token");
+        const token = localStorage.getItem("access_token");
         if (token) {
             fetchMe();
         }
@@ -45,7 +46,7 @@ export const AuthProvider = ({ children }) => {
         try {
             const response = await api.post("/api/account/login/", { identifier, password });
 
-            sessionStorage.setItem("access_token", response.data.access);
+            localStorage.setItem("access_token", response.data.access);
             fetchMe();
         } catch (error) {
             console.error(error);
@@ -70,8 +71,8 @@ export const AuthProvider = ({ children }) => {
             // Send a request to the backend to clear the refresh token in the HttpOnly cookie
             await api.post("/api/account/logout/");
 
-            // Remove access token from sessionStorage
-            sessionStorage.removeItem("access_token");
+            // Remove access token from localStorage
+            localStorage.removeItem("access_token");
 
             // Clear user state
             setUser(null);

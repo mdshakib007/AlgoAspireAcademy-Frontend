@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CommonButton from '../Common/CommonButton';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import { formatDate } from '../../utils/postActions';
@@ -16,15 +16,25 @@ const QuizLesson = ({ lesson, enrollmentId, lessonCompletion }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [selectedOptions, setSelectedOptions] = useState({});
     const [submitted, setSubmitted] = useState(false);
-
+    const [marks, setMarks] = useState(0);
+    const [correctAnswers, setCorrectAnswers] = useState({});
 
     const currentQuestion = questions[currentIndex];
 
+    useEffect(() => {
+        if (lessonCompletion) {
+            // Set answers if quiz is already completed
+            setSelectedOptions(lessonCompletion.quiz_answers || {});
+        }
+    }, [lessonCompletion]);
+
     const handleOptionSelect = (option) => {
-        setSelectedOptions(prev => ({
-            ...prev,
-            [currentQuestion.id]: option
-        }));
+        if (!submitted) {
+            setSelectedOptions(prev => ({
+                ...prev,
+                [currentQuestion.id]: option
+            }));
+        }
     };
 
     const handleNext = () => {
@@ -40,21 +50,36 @@ const QuizLesson = ({ lesson, enrollmentId, lessonCompletion }) => {
     };
 
     const handleQuizSubmit = async () => {
-        const quizAnswers = Object.entries(selectedOptions).reduce((acc, [questionId, answer]) => {
-            acc[questionId] = answer;
-            return acc;
-        }, {});
-
-        const success = await markCompleted({ quizAnswers });
+        let totalMarks = 0;
+        let answerDetails = {};
+    
+        questions.forEach((question) => {
+            const userAnswer = selectedOptions[question.id];
+            const correctAnswer = question.correct_option;
+    
+            // Check if the answer is correct and assign marks
+            const isCorrect = userAnswer === correctAnswer;
+            if (isCorrect) totalMarks++;
+    
+            // Store explanation
+            answerDetails[question.id] = {
+                correctAnswer,
+                explanation: question.explanation,
+                isCorrect
+            };
+        });
+    
+        setMarks(totalMarks);
+        setCorrectAnswers(answerDetails);
+        
+        const success = await markCompleted({ quizAnswers: selectedOptions, quizMarks: totalMarks });
         if (success) {
             setSubmitted(true);
-            toast.success("Quiz submitted successfully.")
+            toast.success("Quiz submitted successfully.");
         }
     };
 
-
     if (!quiz) return <div>No quiz available.</div>;
-
 
     return (
         <div className="p-2 md:p-6 rounded-xl text-white space-y-6">
@@ -62,12 +87,22 @@ const QuizLesson = ({ lesson, enrollmentId, lessonCompletion }) => {
                 <h2 className="md:text-xl font-bold">{lesson.title}</h2>
                 <p className='text-xs md:text-sm'>Updated: {formatDate(lesson.updated_at)}</p>
             </div>
+
             <div className='border-yellow-500 border-l-5 px-2'>
                 <h1 className=' md:text-lg text-yellow-500 font-bold'>Lesson Summary</h1>
                 <p className='text-sm text-gray-300'>{lesson?.summary || 'No Summary Available'}</p>
             </div>
 
             <h3 className="mt-4 text-lg font-bold">Quiz: {quiz?.title}</h3>
+
+            {isCompleted && (
+                <div className="text-center">
+                    <p className="text-green-400 font-semibold">
+                        You Already Completed This Quiz, Score:
+                        <span className='font-mono text-2xl'> {lessonCompletion?.quiz_marks}/{questions.length}</span>
+                    </p>
+                </div>
+            )}
 
             <div className="space-y-4">
                 <h4 className="font-bold text-base text-yellow-500 border-yellow-500 border-l-5 px-2">
@@ -77,6 +112,7 @@ const QuizLesson = ({ lesson, enrollmentId, lessonCompletion }) => {
                     {['A', 'B', 'C', 'D'].map((opt) => {
                         const optionText = currentQuestion[`option_${opt.toLowerCase()}`];
                         const isSelected = selectedOptions[currentQuestion.id] === opt;
+                        const isDisabled = submitted; // Disable options after submission
 
                         return (
                             <button
@@ -86,12 +122,21 @@ const QuizLesson = ({ lesson, enrollmentId, lessonCompletion }) => {
                                     : 'bg-gray-800 hover:bg-gray-700'
                                     }`}
                                 onClick={() => handleOptionSelect(opt)}
+                                disabled={isDisabled} // Disable if submitted
                             >
                                 <span className="font-bold mr-2">{opt}.</span> {optionText}
                             </button>
                         );
                     })}
                 </div>
+
+                {submitted && (
+                    <div className="mt-4">
+                        <p className="text-sm font-bold">
+                            Explanation: {correctAnswers[currentQuestion.id]?.explanation}
+                        </p>
+                    </div>
+                )}
             </div>
 
             <div className="flex justify-between items-center mt-6">
@@ -115,11 +160,20 @@ const QuizLesson = ({ lesson, enrollmentId, lessonCompletion }) => {
             </div>
 
             {submitted && (
-                <p className="text-green-400 font-semibold text-center mt-4">
-                    Quiz submitted successfully!
-                </p>
+                <div>
+                    <p className='text-lg font-bold'>Marks: <span className='font-mono'>{marks}/{questions.length}</span></p>
+                    {questions.map((question) => (
+                        <div key={question.id} className="mt-4">
+                            <h5 className="text-yellow-500 font-semibold">Q{question.id}: {question.title}</h5>
+                            <p className={`text-sm ${correctAnswers[question.id]?.isCorrect ? 'text-green-500' : 'text-red-500'}`}>
+                                {correctAnswers[question.id]?.isCorrect ? "Correct!" : "Incorrect!"}
+                            </p>
+                            <p className="text-gray-300">Your answer: {selectedOptions[question.id]}</p>
+                            <p className="text-gray-300">Correct answer: {correctAnswers[question.id]?.correctAnswer}</p>
+                        </div>
+                    ))}
+                </div>
             )}
-
         </div>
     );
 };

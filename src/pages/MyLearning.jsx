@@ -82,7 +82,7 @@ const MyLearning = () => {
                 if (id) {
                     const [courseRes, enrollmentRes] = await Promise.all([
                         api.get(`/api/course/details/${id}/`),
-                        api.get(`/api/enrollment/details/0/?user_id=${user?.id}&course_id=${id}`)
+                        api.get(`/api/enrollment/details/0/?user_id=${user?.id || localStorage.getItem('user_id')}&course_id=${id}`)
                     ]);
                     setCourse(courseRes.data);
                     setEnrollmentData(enrollmentRes.data);
@@ -162,7 +162,7 @@ const MyLearning = () => {
                             )}
 
                             <div
-                                className={`mt-10 w-fit p-2 rounded-box cursor-pointer font-bold ${showNotes ? 'bg-red-500 text-black' : 'bg-green-500'}`}
+                                className={`mt-10 text-black rounded-full w-fit p-2 rounded-box cursor-pointer font-bold ${showNotes ? 'bg-red-500' : 'bg-yellow-500'}`}
                                 onClick={() => setShowNotes(!showNotes)}
                             >
                                 {

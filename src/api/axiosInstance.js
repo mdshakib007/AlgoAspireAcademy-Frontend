@@ -21,7 +21,7 @@ const api = axios.create({
 // Request interceptor to attach access token
 api.interceptors.request.use(
     (config) => {
-        const accessToken = sessionStorage.getItem("access_token");
+        const accessToken = localStorage.getItem("access_token");
         if (accessToken) {
             config.headers.Authorization = `Bearer ${accessToken}`;
         }
@@ -62,7 +62,7 @@ api.interceptors.response.use(
                 const { access } = refreshResponse.data;
 
                 // Save the new access token
-                sessionStorage.setItem('access_token', access);
+                localStorage.setItem('access_token', access);
                 isRefreshing = false;
                 onRefreshed(access);
 
@@ -75,7 +75,7 @@ api.interceptors.response.use(
 
                 // If refresh token expired, clear session data and redirect to login
                 if (refreshError.response && refreshError.response.status === 401) {
-                    sessionStorage.removeItem('access_token');
+                    localStorage.removeItem('access_token');
                 }
                 return Promise.reject(refreshError);
             }

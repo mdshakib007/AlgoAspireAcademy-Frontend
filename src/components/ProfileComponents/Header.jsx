@@ -23,7 +23,7 @@ const Header = ({ username }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const token = sessionStorage.getItem("access_token");
+        const token = localStorage.getItem("access_token");
 
         // Case: User is logged out
         if (!token) {
