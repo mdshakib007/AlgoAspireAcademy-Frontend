@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import api from '../api/axiosInstance';
-import { MdOndemandVideo } from 'react-icons/md';
+import { MdOndemandVideo, MdDoDisturb, MdCheckCircle } from 'react-icons/md';
 import { IoDocumentTextOutline } from 'react-icons/io5';
 import { LuNotebookText, LuFileQuestion } from 'react-icons/lu';
 import toast from 'react-hot-toast';
@@ -10,98 +10,161 @@ import VideoLesson from '../components/MyLearningComponents/VideoLesson';
 import AssignmentLesson from '../components/MyLearningComponents/AssignmentLesson';
 import QuizLesson from '../components/MyLearningComponents/QuizLesson';
 import Notes from '../components/MyLearningComponents/Notes';
+import { AuthContext } from '../context/AuthContext';
+import { useLessonCompletion } from '../hooks/useLessonCompletion';
 
-// Function to return the icon based on the lecture type.
+
+// A reusable checkbox component for marking lesson as completed
+const LessonCompletionCheckbox = ({ enrollmentId, lessonId, isCompleted }) => {
+    const { markCompleted, loading } = useLessonCompletion(enrollmentId, lessonId);
+
+    const handleCheckbox = async () => {
+        const success = await markCompleted();
+        if (success) {
+            toast.success("Lesson marked as completed.");
+        }
+    };
+
+    if (isCompleted) return null;
+
+    return (
+        <div className="flex items-center space-x-2 p-4 border border-gray-700 rounded-lg bg-gray-900 mt-6">
+            <input
+                type="checkbox"
+                onChange={handleCheckbox}
+                disabled={loading}
+                className="checkbox checkbox-warning"
+            />
+            <label className="text-green-500 font-bold cursor-pointer">
+                Mark Lesson Completed
+            </label>
+        </div>
+    );
+};
+
+// Icons based on lesson types
 const getIcon = (type) => {
     switch (type) {
-        case 'Video':
-            return <MdOndemandVideo className="text-yellow-500" />;
-        case 'Text':
-            return <IoDocumentTextOutline className="text-yellow-500" />;
-        case 'Assignment':
-            return <LuNotebookText className="text-yellow-500" />;
-        case 'Quiz':
-            return <LuFileQuestion className="text-yellow-500" />;
-        default:
-            return <span className="text-yellow-500">📄</span>;
+        case 'Video': return <MdOndemandVideo className="text-yellow-500" />;
+        case 'Text': return <IoDocumentTextOutline className="text-yellow-500" />;
+        case 'Assignment': return <LuNotebookText className="text-yellow-500" />;
+        case 'Quiz': return <LuFileQuestion className="text-yellow-500" />;
+        default: return <span className="text-yellow-500">📄</span>;
     }
 };
 
 const MyLearning = () => {
+    const { user, fetchMe } = useContext(AuthContext);
     const { idAndSlug } = useParams();
     const [course, setCourse] = useState(null);
     const [currentLesson, setCurrentLesson] = useState(null);
+    const [enrollmentData, setEnrollmentData] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-    const [id, slug] = idAndSlug ? idAndSlug.split('-') : [];
+    const [id] = idAndSlug ? idAndSlug.split('-') : [];
+
+    const isLessonCompleted = (lessonId) => {
+        return enrollmentData?.lesson_completions?.some(lc => lc.lesson === lessonId);
+    };
 
     useEffect(() => {
-        if (id) {
-            api.get(`/api/course/details/${id}/`)
-                .then((res) => {
-                    setCourse(res.data);
-                    if (res.data.modules.length > 0 && res.data.modules[0].lessons.length > 0) {
-                        fetchLessonDetails(res.data.modules[0].lessons[0]);
+        const loadData = async () => {
+            try {
+                if (!user) {
+                    await fetchMe();
+                }
+                if (id) {
+                    const [courseRes, enrollmentRes] = await Promise.all([
+                        api.get(`/api/course/details/${id}/`),
+                        api.get(`/api/enrollment/details/0/?user_id=${user?.id}&course_id=${id}`)
+                    ]);
+                    setCourse(courseRes.data);
+                    setEnrollmentData(enrollmentRes.data);
+
+                    if (courseRes.data.modules.length > 0 && courseRes.data.modules[0].lessons.length > 0) {
+                        await fetchLessonDetails(courseRes.data.modules[0].lessons[0]);
                     }
-                })
-                .catch((err) => console.error(err));
-        }
-    }, [id]);
+                }
+            } catch (error) {
+                console.error(error);
+                toast.error("Failed to load course or enrollment data.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadData();
+    }, [id, user]);
 
     const fetchLessonDetails = async (lesson) => {
-        setCurrentLesson(lesson);
         try {
             const res = await api.get(`/api/course/lesson/details/${lesson.id}/`);
             setCurrentLesson(res.data);
         } catch {
-            toast.error('An error occurred');
+            toast.error('An error occurred while fetching lesson details.');
         }
     };
 
-    // Render lesson content based on lecture type.
     const renderLessonContent = () => {
         if (!currentLesson) {
             return <p className="text-gray-400 italic">Select a lesson to begin.</p>;
         }
         switch (currentLesson.lecture_type) {
-            case 'Text':
-                return <TextLesson lesson={currentLesson} />;
-            case 'Video':
-                return <VideoLesson lesson={currentLesson} />;
-            case 'Assignment':
-                return <AssignmentLesson lesson={currentLesson} />;
-            case 'Quiz':
-                return <QuizLesson lesson={currentLesson} />;
-            default:
-                return <p className="text-red-500">Unsupported lesson type.</p>;
+            case 'Text': return <TextLesson lesson={currentLesson} />;
+            case 'Video': return <VideoLesson lesson={currentLesson} />;
+            case 'Assignment': return <AssignmentLesson
+                enrollmentId={enrollmentData?.id}
+                isCompleted={isLessonCompleted(currentLesson?.is)}
+                lesson={currentLesson}
+            />;
+            case 'Quiz': return <QuizLesson
+                lesson={currentLesson}
+                enrollmentId={enrollmentData?.id}
+                isCompleted={isLessonCompleted(currentLesson?.id)}
+            />;
+            default: return <p className="text-red-500">Unsupported lesson type.</p>;
         }
     };
+
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center min-h-screen">
+                <span className="loading loading-spinner loading-lg text-yellow-500"></span>
+            </div>
+        );
+    }
 
     return (
         <section className="container mx-auto px-4 md:px-8 py-6">
             {course ? (
                 <>
-                    {/* Course Header (optional addition for context) */}
                     <header className="mb-6">
                         <h1 className="text-2xl lg:text-3xl font-bold">{course.name}</h1>
                     </header>
 
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        {/* Right Side: Lesson Content (show first on mobile) */}
+                        {/* Main lesson content */}
                         <main className="order-1 lg:order-2 bg-base-100 rounded-box shadow min-h-[300px] lg:col-span-2 p-2 md:p-5">
                             {renderLessonContent()}
 
-                            {
-                                (currentLesson.lecture_type === 'Text' || currentLesson.lecture_type === 'Video') && <div className='text-green-400 p-5 border-2 border-gray-700 rounded-box bg-gray-900 flex justify-between gap-3'>
-                                    <label htmlFor="completed" className='font-bold cursor-pointer'>Lesson Completed?</label>
-                                    <input type="checkbox" name="completed" id="completed" className='checkbox checkbox-success' />
-                                </div>
-                            }
+                            {(currentLesson.lecture_type === 'Text' || currentLesson.lecture_type === 'Video') && (
+                                <LessonCompletionCheckbox
+                                    enrollmentId={enrollmentData?.id}
+                                    lessonId={currentLesson?.id}
+                                    isCompleted={isLessonCompleted(currentLesson?.id)}
+                                />
+                            )}
 
-                            {/* Notes section  */}
-                            <Notes lesson={currentLesson} />
+                            {(currentLesson.lecture_type === 'Text' || currentLesson.lecture_type === 'Video') ? (
+                                <Notes lesson={currentLesson} />
+                            ) : (
+                                <div className='flex justify-center items-center gap-2 font-bold text-2xl mt-10 text-gray-500'>
+                                    <MdDoDisturb /> Notes not allowed for this lecture.
+                                </div>
+                            )}
                         </main>
 
-                        {/* Left Side: Lessons Accordion */}
+                        {/* Sidebar lesson list */}
                         <aside className="order-2 lg:order-1 bg-base-200 rounded-lg shadow p-4">
                             <h2 className="text-xl font-bold mb-4">Lessons</h2>
                             <div className="space-y-4">
@@ -120,13 +183,17 @@ const MyLearning = () => {
                                                         <li
                                                             key={lesson.id}
                                                             onClick={() => fetchLessonDetails(lesson)}
-                                                            className={`flex items-center gap-2 cursor-pointer px-2 py-1 rounded-md transition hover:bg-gray-500 ${currentLesson?.id === lesson.id ? 'bg-gray-500 text-yellow-500' : ''
-                                                                }`}
+                                                            className={`flex items-center gap-2 cursor-pointer px-2 py-1 rounded-md transition hover:bg-gray-600 ${currentLesson?.id === lesson.id ? 'bg-gray-700 text-yellow-500' : ''}`}
                                                         >
                                                             {getIcon(lesson.lecture_type)}
                                                             <span className="text-sm font-bold">{lesson.title}</span>
+
+                                                            {isLessonCompleted(lesson.id) && (
+                                                                <MdCheckCircle className="text-green-500 text-lg ml-auto" />
+                                                            )}
+
                                                             {!lesson.is_published && (
-                                                                <span className="badge badge-warning text-xs">
+                                                                <span className="badge badge-warning text-xs ml-2">
                                                                     Unpublished
                                                                 </span>
                                                             )}
@@ -142,7 +209,7 @@ const MyLearning = () => {
                     </div>
                 </>
             ) : (
-                <div className="text-center text-gray-500">Loading course details...</div>
+                <div className="text-center text-gray-500">No course data found.</div>
             )}
         </section>
     );
