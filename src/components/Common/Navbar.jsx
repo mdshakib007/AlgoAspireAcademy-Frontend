@@ -15,6 +15,7 @@ import {
 import { FaGear } from "react-icons/fa6";
 import { RiDashboardHorizontalFill, RiPagesFill } from "react-icons/ri";
 import Headroom from 'react-headroom';
+import { motion } from "framer-motion";
 
 
 const Navbar = ({ modalRef }) => {
@@ -23,12 +24,18 @@ const Navbar = ({ modalRef }) => {
     return (
         <Headroom>
             <nav className="top-0 left-0 w-full text-white z-50">
-                <div className="navbar container mx-auto bg-transparent mt-2 rounded-lg backdrop-blur-xl border border-gray-700">
+                <div className="navbar container mx-auto bg-transparent mt-2 rounded-lg backdrop-blur-2xl border border-gray-700">
                     {/* Left Section: Logo */}
                     <div className="flex-1">
                         <div className="flex">
-                            <HashLink className="tooltip tooltip-warning tooltip-bottom" to="/#" data-tip='Return to Home'>
-                                <img src="/aaa_favicon.png" alt="AAA" className="h-14 w-14" />
+                            <HashLink to="/#">
+                                <motion.img
+                                    whileHover={{ rotate: 360 }}
+                                    transition={{ duration: 0.6, ease: "easeInOut" }}
+                                    src="/aaa_favicon.png"
+                                    alt="AAA"
+                                    className="h-14 w-14"
+                                />
                             </HashLink>
                         </div>
                     </div>

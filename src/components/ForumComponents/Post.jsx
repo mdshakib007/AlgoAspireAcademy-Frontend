@@ -19,6 +19,7 @@ import toast from 'react-hot-toast';
 import { AuthContext } from '../../context/AuthContext';
 import api from '../../api/axiosInstance';
 import { useNavigate } from 'react-router-dom';
+import { formatDate } from '../../utils/postActions';
 
 
 const postTypeStyles = {
@@ -114,11 +115,11 @@ const Post = ({ post, fetchPosts }) => {
                             </div>
                         </div>
                         <p className='text-xs md:text-sm text-gray-300 flex items-center gap-1'>
-                            {post.created_at.slice(0, 10)} • <BiWorld />
+                            {formatDate(post.created_at)} • <BiWorld />
                         </p>
                     </div>
                 </HashLink>
-                <div className='flex items-center gap-2 text-gray-300'>
+                <div>
                     <div className="dropdown dropdown-end">
                         <div tabIndex={0} role="button" className="cursor-pointer text-lg md:text-xl">
                             <MdMoreVert />

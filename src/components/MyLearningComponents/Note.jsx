@@ -1,18 +1,10 @@
 import React from 'react';
 import { BiWorld } from "react-icons/bi";
 import { HashLink } from 'react-router-hash-link';
+import { formatDate } from '../../utils/postActions';
 
 
 const Note = ({ note, showNote }) => {
-    // Format ISO timestamp into “Apr 9, 2025” style
-    const formatDate = (isoString) => {
-        const d = new Date(isoString);
-        return d.toLocaleDateString('en-US', {
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric',
-        });
-    };
 
     return (
         <div className='bg-gray-800 rounded-box flex flex-col h-full p-3'>

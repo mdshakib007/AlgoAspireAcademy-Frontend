@@ -57,3 +57,24 @@ export const copyLink = async (url) => {
         toast.error("Failed to copy link");
     }
 };
+
+export const formatDate = (isoString) => {
+    const d = new Date(isoString);
+    return d.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+    });
+};
+
+export const formatDateTime = (isoString) => {
+    const d = new Date(isoString);
+    return d.toLocaleString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true,
+    });
+};

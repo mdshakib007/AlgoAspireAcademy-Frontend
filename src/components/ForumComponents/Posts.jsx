@@ -82,15 +82,15 @@ const Posts = () => {
             <Header onFilterChange={(postType) => fetchPosts(`/api/discussion/post/list/`, postType, searchTitle)} />
 
             {/* Search Bar */}
-            <form onSubmit={handleSearch} className="my-6 flex items-center gap-4">
+            <form onSubmit={handleSearch} className="my-2 flex items-center gap-2">
                 <input
                     type="text"
                     placeholder="Search posts by title..."
                     value={searchTitle}
                     onChange={(e) => setSearchTitle(e.target.value)}
-                    className="flex-grow px-4 py-2 rounded-full bg-gray-800 text-white placeholder-gray-400 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                    className="flex-grow p-2 rounded-full bg-gray-800 text-white placeholder-gray-400 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-500"
                 />
-                <CommonButton type="submit"><FaMagnifyingGlass />Search</CommonButton>
+                <CommonButton type="submit"><FaMagnifyingGlass /><span className='hidden md:block'>Search</span></CommonButton>
             </form>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
@@ -129,7 +129,7 @@ const Posts = () => {
                     )}
                     <div className='flex justify-between items-center gap-4 my-5'>
                         <CommonButton onClick={handlePrevious} disabled={!previousPage}>
-                            <FaArrowLeft /> Previous
+                            <FaArrowLeft />
                         </CommonButton>
 
                         <p className="text-gray-400 text-sm">{posts.length} / {totalPostCount}</p>

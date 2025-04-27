@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import api from '../../api/axiosInstance';
 import toast from 'react-hot-toast';
+import { formatDate } from '../../utils/postActions';
 
 
 const AnnouncementCard = ({ announcement }) => {
@@ -39,7 +40,7 @@ const AnnouncementCard = ({ announcement }) => {
                     <div className="flex-1">
                         <h3 className="text-xl font-semibold">{announcement.title}</h3>
                         <p className="text-gray-300">
-                            {new Date(announcement.created_at).toLocaleDateString()}
+                            {formatDate(announcement.created_at)}
                         </p>
 
                         <span

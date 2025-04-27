@@ -96,7 +96,7 @@ const PublicNotes = ({ currentLesson, showNote }) => {
                     onClick={handlePrevious}
                     disabled={!pagination.previous || loading}
                 >
-                    <FaArrowLeft /> Previous
+                    <FaArrowLeft />
                 </CommonButton>
 
                 <p className="text-gray-400 text-sm">

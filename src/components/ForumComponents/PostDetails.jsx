@@ -11,7 +11,7 @@ import {
     MdMoreVert, MdOutlineReport, MdDeleteOutline
 } from 'react-icons/md';
 import { LuFileQuestion } from "react-icons/lu";
-import { handleVote, handleComment, copyLink } from '../../utils/postActions';
+import { handleVote, handleComment, copyLink, formatDateTime } from '../../utils/postActions';
 import api from '../../api/axiosInstance';
 import toast from 'react-hot-toast';
 import CommonButton from '../Common/CommonButton';
@@ -196,7 +196,7 @@ const PostDetails = ({ postId: propPostId }) => {
                         <div>
                             <h4 className='font-bold text-sm md:text-lg'>{username}</h4>
                             <p className='text-xs md:text-sm text-gray-400 flex items-center gap-2'>
-                                {created_at.slice(0, 10)} • <BiWorld />
+                                {formatDateTime(created_at)} • <BiWorld />
                             </p>
                         </div>
                     </div>
@@ -344,7 +344,7 @@ const PostDetails = ({ postId: propPostId }) => {
                         onClick={handlePrevPage}
                         disabled={!previous}
                     >
-                        <FaArrowLeft /> Previous
+                        <FaArrowLeft />
                     </CommonButton>
 
                     <CommonButton
