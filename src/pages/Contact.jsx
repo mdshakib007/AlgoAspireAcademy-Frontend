@@ -44,8 +44,8 @@ const contactItems = [
 
 const Contact = () => {
     return (
-        <div className="px-4 py-16 flex flex-col items-center justify-center">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold gradient-text mb-12 text-center tracking-wide">
+        <div className="p-5 flex flex-col items-center justify-center">
+            <h1 className="text-2xl md:text-3xl lg:text-5xl font-extrabold gradient-text mb-12 text-center tracking-wide">
                 Contact Us
             </h1>
 
@@ -53,23 +53,23 @@ const Contact = () => {
                 {contactItems.map((item, index) => (
                     <div
                         key={index}
-                        className="bg-gradient-to-tr from-gray-800 to-gray-700 rounded-box shadow-xl p-6"
+                        className="bg-gradient-to-tr from-gray-800 to-gray-700 rounded-box shadow-xl p-2 md:p-6"
                     >
                         <div className="flex items-start space-x-4">
                             {item.icon}
                             <div>
-                                <p className="text-2xl font-semibold mb-1">{item.title}</p>
+                                <p className="text-xl md:text-2xl font-semibold mb-1">{item.title}</p>
                                 {item.link ? (
                                     <a
                                         href={item.link}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-xl text-yellow-500 hover:underline"
+                                        className="text-lg md:text-xl text-yellow-500 hover:underline"
                                     >
                                         {item.detail}
                                     </a>
                                 ) : (
-                                    <div className="text-xl text-yellow-500">{item.detail}</div>
+                                    <div className="text-lg md:text-xl text-yellow-500">{item.detail}</div>
                                 )}
                             </div>
                         </div>
