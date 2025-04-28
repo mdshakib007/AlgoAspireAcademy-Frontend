@@ -52,15 +52,15 @@ const QuizLesson = ({ lesson, enrollmentId, lessonCompletion }) => {
     const handleQuizSubmit = async () => {
         let totalMarks = 0;
         let answerDetails = {};
-    
+
         questions.forEach((question) => {
             const userAnswer = selectedOptions[question.id];
             const correctAnswer = question.correct_option;
-    
+
             // Check if the answer is correct and assign marks
             const isCorrect = userAnswer === correctAnswer;
             if (isCorrect) totalMarks++;
-    
+
             // Store explanation
             answerDetails[question.id] = {
                 correctAnswer,
@@ -68,10 +68,10 @@ const QuizLesson = ({ lesson, enrollmentId, lessonCompletion }) => {
                 isCorrect
             };
         });
-    
+
         setMarks(totalMarks);
         setCorrectAnswers(answerDetails);
-        
+
         const success = await markCompleted({ quizAnswers: selectedOptions, quizMarks: totalMarks });
         if (success) {
             setSubmitted(true);
@@ -105,7 +105,7 @@ const QuizLesson = ({ lesson, enrollmentId, lessonCompletion }) => {
             )}
 
             <div className="space-y-4">
-                <h4 className="font-bold text-base text-yellow-500 border-yellow-500 border-l-5 px-2">
+                <h4 className="font-bold text-xl text-yellow-500 px-2">
                     Q{currentIndex + 1}: {currentQuestion?.title}
                 </h4>
                 <div className="grid gap-3">
@@ -130,10 +130,13 @@ const QuizLesson = ({ lesson, enrollmentId, lessonCompletion }) => {
                     })}
                 </div>
 
-                {submitted && (
-                    <div className="mt-4">
-                        <p className="text-sm font-bold">
-                            Explanation: {correctAnswers[currentQuestion.id]?.explanation}
+                {(submitted || isCompleted) && (
+                    <div className="my-5 border-l-5 border-yellow-500 px-2">
+                        <p>
+                            Correct Option: <span className='font-bold'>{currentQuestion.correct_option}</span>
+                        </p>
+                        <p>
+                            Explanation: <span className="font-bold">{currentQuestion.explanation}</span>
                         </p>
                     </div>
                 )}

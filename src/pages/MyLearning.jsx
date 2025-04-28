@@ -16,13 +16,16 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 
 // A reusable checkbox component for marking lesson as completed
-const LessonCompletionCheckbox = ({ enrollmentId, lessonId, isCompleted }) => {
+const LessonCompletionCheckbox = ({ enrollmentId, lessonId, isCompleted, onCompletion }) => {
     const { markCompleted, loading } = useLessonCompletion(enrollmentId, lessonId);
 
     const handleCheckbox = async () => {
         const success = await markCompleted();
         if (success) {
             toast.success("Lesson marked as completed.");
+            if (onCompletion) {
+                onCompletion(lessonId);  // notify parent component
+            }
         }
     };
 
@@ -30,18 +33,20 @@ const LessonCompletionCheckbox = ({ enrollmentId, lessonId, isCompleted }) => {
 
     return (
         <div className="flex items-center space-x-2 p-4 border border-gray-700 rounded-lg bg-gray-900 mt-6">
-            <input
-                type="checkbox"
-                onChange={handleCheckbox}
-                disabled={loading}
-                className="checkbox checkbox-warning"
-            />
-            <label className="text-green-500 font-bold cursor-pointer">
-                Mark Lesson Completed
+            <label className="text-green-500 font-bold cursor-pointer flex items-center gap-2">
+                <input
+                    type="checkbox"
+                    onChange={handleCheckbox}
+                    disabled={loading}
+                    className="checkbox checkbox-success"
+                    id={lessonId}
+                />
+                Mark Lesson Completed?
             </label>
         </div>
     );
 };
+
 
 // Icons based on lesson types
 const getIcon = (type) => {
@@ -111,6 +116,17 @@ const MyLearning = () => {
         }
     };
 
+    const handleLessonCompleted = (completedLessonId) => {
+        setEnrollmentData(prev => ({
+            ...prev,
+            lesson_completions: [
+                ...(prev?.lesson_completions || []),
+                { lesson: completedLessonId } // Push the newly completed lesson
+            ]
+        }));
+    };
+
+
     const renderLessonContent = () => {
         if (!currentLesson) {
             return <p className="text-gray-400 italic">Select a lesson to begin.</p>;
@@ -158,7 +174,9 @@ const MyLearning = () => {
                                     enrollmentId={enrollmentData?.id}
                                     lessonId={currentLesson?.id}
                                     isCompleted={isLessonCompleted(currentLesson?.id)}
+                                    onCompletion={handleLessonCompleted}
                                 />
+
                             )}
 
                             <div

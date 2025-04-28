@@ -30,7 +30,7 @@ const RankUpHero = () => {
                     }}
                 />
                 
-                <ul className="list rounded-box shadow-md w-full relative z-10">
+                <ul className="list rounded-box shadow-md w-full relative">
                     <li className="p-4 pb-2 text-xs opacity-60 tracking-wide">Monthly Top Learners</li>
                     
                     {/* Map over users to show each */}

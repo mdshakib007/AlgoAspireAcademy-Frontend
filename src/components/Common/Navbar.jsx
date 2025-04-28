@@ -24,7 +24,7 @@ const Navbar = ({ modalRef }) => {
     return (
         <Headroom>
             <nav className="top-0 left-0 w-full text-white z-50">
-                <div className="navbar container mx-auto bg-transparent mt-2 rounded-lg backdrop-blur-2xl border border-gray-700">
+                <div className="navbar container mx-auto bg-zinc-500/10 mt-2 rounded-lg backdrop-blur-xl border-2 border-gray-700">
                     {/* Left Section: Logo */}
                     <div className="flex-1">
                         <div className="flex">
