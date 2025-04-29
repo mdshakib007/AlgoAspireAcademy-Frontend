@@ -2,6 +2,7 @@ import js from '@eslint/js'
 import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
+import tailwindConfig from './tailwind.config'
 
 export default [
   { ignores: ['dist'] },
@@ -29,5 +30,17 @@ export default [
         { allowConstantExport: true },
       ],
     },
+    tailwindConfig: {
+      darkMode: 'class',
+      content: ['./src/**/*.{js,jsx,ts,tsx,html}'],
+      theme: {
+        extend: {},
+      },
+      plugins: [require('daisyui')],
+      daisyui: {
+        themes: ['light', 'dark'],
+        darkTheme: 'dark',
+      },
+    }
   },
 ]

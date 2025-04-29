@@ -6,16 +6,15 @@ import Footer from "../components/Common/Footer";
 import AuthModal from "../components/Common/AuthModal";
 import AnnouncementModal from "../components/Common/AnnouncementModal";
 
+
 const MainLayout = () => {
-    const modalRef = useRef(null);  // Create a ref for the modal
+    const modalRef = useRef(null);
 
     return (
         <div>
-            {/* Pass modalRef to Navbar */}
             <Navbar modalRef={modalRef} />
             <Header />
 
-            {/* Pass the same ref to AuthModal */}
             <AuthModal ref={modalRef} />
             <AnnouncementModal />
 
