@@ -1,16 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import api from "../api/axiosInstance";
 import MyCourseCard from "../components/CourseComponents/MyCourseCard";
-import AnnouncementCard from "../components/CourseComponents/AnnouncementCard";
+import { AuthContext } from "../context/AuthContext";
 
 
 const MyCourses = () => {
     const [courses, setCourses] = useState({});
     const [loading, setLoading] = useState(true);
+    const {user} = useContext(AuthContext);
 
     useEffect(() => {
         // Fetch user course summary
-        api.get("/api/account/mdshakib007/summary/")
+        api.get(`/api/account/${user?.username}/summary/`)
             .then((res) => setCourses(res.data))
             .catch((err) => console.error("Error fetching courses", err))
             .finally(() => setLoading(false));
